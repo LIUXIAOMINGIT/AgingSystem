@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AgingPumpC9.cs" />
     <Compile Include="AgingPump.cs" />
     <Compile Include="AlarmMetrix.cs" />
     <Compile Include="Commands\BaseCommand.cs" />

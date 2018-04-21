@@ -941,7 +941,9 @@ namespace  AgingSystem
             {
                 //可以启动检查线程
                 m_bCanStartCheck = true;
-                CreateCheckPumpStatusThread();
+                //C9不用检查是否启动，因为C9不支持远程启动和停止
+                if (m_CurrentCustomProductID != CustomProductID.GrasebyC9)
+                    CreateCheckPumpStatusThread();
                 //补电线程启动，等待队列中有新的耗尽泵进入
                 m_bKeepReCharge = true;
                 CreateCheckReChargeThread();
@@ -996,7 +998,9 @@ namespace  AgingSystem
             if (this.AgingStatus != EAgingStatus.AgingComplete)
             {
                 m_bKeepCheckPumpStopStatus = true;
-                CreateCheckPumpStopStatusThread();
+                //C9不用检查是否停止，因为C9不支持远程启动和停止
+                if (m_CurrentCustomProductID != CustomProductID.GrasebyC9)
+                    CreateCheckPumpStopStatusThread();
             }
         }
 
@@ -1199,13 +1203,13 @@ namespace  AgingSystem
             }
             if (this.AgingStatus == EAgingStatus.AgingComplete)
             {
-                //还没开始老化呢，怎么能接收报警数据呢！
+                //老化已结束，不再接收数据
                 Logger.Instance().Info("老化结束，控制器上报的Alarm不处理!");
                 return;
             }
             if (this.m_StoptAgingTime.Year > 2000)
             {
-                //还没开始老化呢，怎么能接收报警数据呢！
+                //老化已停止，不再接收数据
                 Logger.Instance().Info("老化已停止，控制器上报的Alarm不处理!");
                 return;
             }
@@ -1281,6 +1285,11 @@ namespace  AgingSystem
                         alarmMetrix = AlarmMetrix.Instance().AlarmMetrix2100;
                         depletealArmIndex = 0x00000008;
                         lowVolArmIndex = 0x00000100;
+                        break;
+                    case ProductID.GrasebyC9:
+                        alarmMetrix = AlarmMetrix.Instance().AlarmMetrixC9;
+                        depletealArmIndex = 15;
+                        lowVolArmIndex = 12;
                         break;
                     default:
                         break;
@@ -1376,6 +1385,244 @@ namespace  AgingSystem
                             else if (m_CurrentCustomProductID == CustomProductID.GrasebyF8)
                             {
                                 if (info.SubChannel==0)
+                                    m_DepleteManager.UpdateDepleteInfo(cmd.RemoteSocket.IP, info.Channel);
+                            }
+                            else
+                                m_DepleteManager.UpdateDepleteInfo(cmd.RemoteSocket.IP, info.Channel);
+
+                            //启动老化补电时钟
+                            OnRechargePump();
+                            //m_CmdManager.SendCmdRecharge(channel, cmd.RemoteSocket, null);
+                            if (info.BeginBattaryDepleteTime.Year < 2000)
+                            {
+                                info.BeginBattaryDepleteTime = DateTime.Now;
+                                //info.AgingStatus = EAgingStatus.Recharging;//"老化补电中";
+                            }
+                        }
+                        if ((lowVolArmIndex & cmd.PumpPackages[i].Alarm.Alarm) == lowVolArmIndex)
+                        {
+                            //出现了电池低电报警,记录时间
+                            if (info.BeginLowVoltageTime.Year < 2000)
+                            {
+                                info.BeginLowVoltageTime = DateTime.Now;
+                                //info.AgingStatus = EAgingStatus.DisCharging;//"老化放电中";add by 20170708
+                            }
+                        }
+                        //除了低电和耗尽是否有其他报警
+                        uint exceptAlarm = lowVolArmIndex | depletealArmIndex;
+                        if ((exceptAlarm | cmd.PumpPackages[i].Alarm.Alarm) != exceptAlarm)
+                        {
+                            info.RedAlarmStatus = EAgingStatus.Alarm;//"有其他报警，显示红色";
+                        }
+                        else
+                        {
+                            info.RedAlarmStatus = EAgingStatus.Unknown;//"报警消除，显示正常";
+                        }
+                        #endregion
+                    }
+                    else
+                    {
+                        #region //当收到的报警信息在列表中不存在时，需要新增
+                        AgingPump newInfo = new AgingPump();
+                        newInfo.DockNo = dockNo;
+                        newInfo.RowNo = rowNo;
+                        newInfo.Channel = (byte)(cmd.PumpPackages[i].Chanel & 0x0F);//此处是通道号的定义
+                        if (pid == ProductID.GrasebyF8)
+                        {
+                            subChanel = (byte)(cmd.PumpPackages[i].Chanel & 0xF0);
+                            //双道通道号存在高4位
+                            if (subChanel == 0x10)
+                                subChanel = 0; //1号通道编号为0
+                            else if (subChanel == 0x20)
+                                subChanel = 1;//2号通道编号为1
+                            else
+                                subChanel = 0;
+                            newInfo.SubChannel = subChanel;
+                        }
+                        newInfo.BeginAgingTime = controller.BeginAginTime;
+                        //放电时间一开始保存在控制器对象中，由于报警一时上不来，查看详细看不到放电消息
+                        if (newInfo.BeginDischargeTime.Year < 2000)
+                            newInfo.BeginDischargeTime = controller.BeginDischargeTime;
+                        if (newInfo.AgingStatus < controller.AgingStatus)
+                            newInfo.AgingStatus = controller.AgingStatus;//老化状态,这些状态都是在发送命令的时候赋值的,只有在补电时状态信息才不同时
+                        newInfo.PumpType = para.PumpType;
+                        #region //当收到的报警信息在列表中存在时，需要更新
+                        newInfo.Alarm |= cmd.PumpPackages[i].Alarm.Alarm;
+                        //更新报警第一次发生的时间
+                        newInfo.UpdateAlarmTime(cmd.PumpPackages[i].Alarm.Alarm);
+                        //如果某个泵一直发电池耗尽报警，那ADAS也要一直发充电命令
+                        if ((depletealArmIndex & cmd.PumpPackages[i].Alarm.Alarm) == depletealArmIndex)
+                        {
+                            //出现了电池耗尽报警,发充电命令
+                            byte channel = 1;
+                            channel = (byte)(channel << (newInfo.Channel - 1));
+                            //此处的通道号是报警信息包中的通道号，并不是按位定义的,出现报警信息后，要加入此队列add by 20170708
+                            //此处的Channel不是按位存储的，是1，2，3，4，5，6，7，8等自然数,如果是偶数（2道泵），则不必加入到已耗尽队列中去
+                            if (m_CurrentCustomProductID == CustomProductID.GrasebyF6_Double || m_CurrentCustomProductID == CustomProductID.WZS50F6_Double)
+                            {
+                                if (info.Channel % 2 == 1)
+                                    m_DepleteManager.UpdateDepleteInfo(cmd.RemoteSocket.IP, newInfo.Channel);
+                            }
+                            else if (m_CurrentCustomProductID == CustomProductID.GrasebyF8)
+                            {
+                                if (info.SubChannel == 0)
+                                    m_DepleteManager.UpdateDepleteInfo(cmd.RemoteSocket.IP, info.Channel);
+                            }
+                            else
+                            {
+                                m_DepleteManager.UpdateDepleteInfo(cmd.RemoteSocket.IP, info.Channel);
+                            }
+                            OnRechargePump();
+                            if (newInfo.BeginBattaryDepleteTime.Year < 2000)
+                            {
+                                newInfo.BeginBattaryDepleteTime = DateTime.Now;
+                            }
+                        }
+                        if ((lowVolArmIndex & cmd.PumpPackages[i].Alarm.Alarm) == lowVolArmIndex)
+                        {
+                            //出现了电池低电报警,记录时间
+                            if (newInfo.BeginLowVoltageTime.Year < 2000)
+                            {
+                                newInfo.BeginLowVoltageTime = DateTime.Now;
+                            }
+                        }
+                        //除了低电和耗尽是否有其他报警
+                        uint exceptAlarm = lowVolArmIndex | depletealArmIndex;
+                        if ((exceptAlarm | cmd.PumpPackages[i].Alarm.Alarm) != exceptAlarm)
+                        {
+                            newInfo.RedAlarmStatus = EAgingStatus.Alarm;//"有其他报警，显示红色";
+                        }
+                        else
+                        {
+                            newInfo.RedAlarmStatus = EAgingStatus.Unknown;//"没有其他报警，显示正常";
+                        }
+                        #endregion
+                        controller.AgingPumpList.Add(newInfo);
+                        #endregion
+                    }
+                }
+                if (count < controller.AgingPumpList.Count)
+                {
+                    Logger.Instance().InfoFormat("有{0}个泵失去连接，请检查网络设备通道是否良好！", controller.AgingPumpList.Count - count);
+                    foreach (AgingPump pump in controller.AgingPumpList)
+                    {
+                        if (cmd.PumpPackages.FindIndex((x) => { return x.Chanel != pump.Channel; }) >= 0)
+                        {
+                            if (pump.LostTimes <= 25)   //连续25次都失连，则不用再加了,此泵无效了
+                                pump.LostTimes = pump.LostTimes + 1;
+                        }
+                    }
+                }
+            }
+            this.Dispatcher.BeginInvoke(new DeleShowRedAlarm(ShowRedAlarm), new object[] { });
+        }
+
+        /// <summary>
+        /// 更新报警信息,一条完整的报警信息，是一个控制器的信息，如果中途有泵无响应，那么要删除它
+        /// </summary>
+        /// <param name="cmd">C9系列泵专用</param>
+        public void UpdateC9AlarmInfo(GetAlarm cmd)
+        {
+            #region 不处理报警信息
+            if (this.m_StartAgingTime.Year < 2000)
+            {
+                //还没开始老化呢，怎么能接收报警数据呢！
+                Logger.Instance().Info("老化尚未开始，控制器上报的Alarm不处理!");
+                return;
+            }
+            if (this.AgingStatus == EAgingStatus.AgingComplete)
+            {
+                //老化已结束，不再接收数据
+                Logger.Instance().Info("老化结束，控制器上报的Alarm不处理!");
+                return;
+            }
+            if (this.m_StoptAgingTime.Year > 2000)
+            {
+                //老化已停止，不再接收数据
+                Logger.Instance().Info("老化已停止，控制器上报的Alarm不处理!");
+                return;
+            }
+            #endregion
+            if (cmd != null && cmd.PumpPackages != null && cmd.RemoteSocket != null)
+            {
+                Controller controller = m_Controllers.Find((x) => { return x.SocketToken != null && x.SocketToken.IP == cmd.RemoteSocket.IP; });
+                if (controller == null)
+                {
+                    Logger.Instance().ErrorFormat("UpdateAlarmInfo()->控制器不存在货架中,Socket没找到 IP={0}", cmd.RemoteSocket.IPString);
+                    return;
+                }
+                int dockNo = controller.DockNo;
+                int rowNo = controller.RowNo;
+                int count = cmd.PumpPackages.Count; //此次上报的泵数据包数量
+                StringBuilder sb = new StringBuilder();
+                foreach (var p in cmd.PumpPackages)
+                {
+                    sb.Append(p.Chanel.ToString());
+                    sb.Append(",");
+                }
+                Logger.Instance().InfoFormat("收到货架编号为{0},第{1}行控制器上报信息,数据包数量={2},通道编号={3}", dockNo, rowNo, count, sb.ToString().TrimEnd(','));
+                AgingPump info = null;
+                AgingParameter para = m_DockParameter[dockNo] as AgingParameter;
+                CustomProductID cid = ProductIDConvertor.Name2CustomProductID(para.PumpType);
+                ProductID pid = ProductIDConvertor.Custom2ProductID(cid);
+                Hashtable alarmMetrix = null;
+                uint depletealArmIndex = 0, lowVolArmIndex = 0;//耗尽和低电压索引
+                #region //查询低电、耗尽报警ID
+                switch (pid)
+                {
+                    case ProductID.GrasebyC9:
+                        alarmMetrix = AlarmMetrix.Instance().AlarmMetrixC9;
+                        depletealArmIndex = 15;
+                        lowVolArmIndex = 12;
+                        break;
+                    default:
+                        break;
+                }
+                #endregion
+                if (alarmMetrix == null)
+                {
+                    Logger.Instance().ErrorFormat("找不到与此泵类型相关的报警映射表 ProductID = {0}", pid);
+                    return;
+                }
+                //循环6个报警包,36个报警
+                byte subChanel = 0;
+                for (int i = 0; i < count; i++)
+                {
+                    info = controller.FindPump(dockNo, rowNo, (byte)(cmd.PumpPackages[i].Chanel & 0x000F));
+                    if (info != null)
+                    {
+                        if (info.AgingStatus == EAgingStatus.AgingComplete)
+                        {
+                            Logger.Instance().InfoFormat("此泵已经老化结束，上报的报警信息不处理。泵位置信息：货架号={0},行号={1},通道号={2}", info.DockNo, info.RowNo, info.Channel);
+                            continue;
+                        }
+                        info.LostTimes = 0;//清除失联记录
+                        info.PumpType = para.PumpType;
+                        info.BeginAgingTime = controller.BeginAginTime;
+                        if (info.BeginDischargeTime.Year < 2000)
+                            info.BeginDischargeTime = controller.BeginDischargeTime;
+                        if (info.AgingStatus < controller.AgingStatus)
+                            info.AgingStatus = controller.AgingStatus;//老化状态,这些状态都是在发送命令的时候赋值的,只有在补电时状态信息才不同时
+                        #region //当收到的报警信息在列表中存在时，需要更新
+                        info.Alarm |= cmd.PumpPackages[i].Alarm.Alarm;
+                        //更新报警第一次发生的时间
+                        info.UpdateAlarmTime(cmd.PumpPackages[i].Alarm.Alarm);
+                        //如果某个泵一直发电池耗尽报警，那ADAS也要一直发充电命令
+                        if ((depletealArmIndex & cmd.PumpPackages[i].Alarm.Alarm) == depletealArmIndex)
+                        {
+                            //出现了电池耗尽报警,发充电命令
+                            //byte channel = 1;
+                            //channel = (byte)(channel << (info.Channel - 1));
+                            //此处的通道号是报警信息包中的通道号，并不是按位定义的,出现报警信息后，要加入此队列,add by 20170708
+                            //此处的Channel不是按位存储的，是1，2，3，4，5，6，7，8等自然数,如果是偶数（2道泵），则不必加入到已耗尽队列中去
+                            if (m_CurrentCustomProductID == CustomProductID.GrasebyF6_Double || m_CurrentCustomProductID == CustomProductID.WZS50F6_Double)
+                            {
+                                if (info.Channel % 2 == 1)
+                                    m_DepleteManager.UpdateDepleteInfo(cmd.RemoteSocket.IP, info.Channel);
+                            }
+                            else if (m_CurrentCustomProductID == CustomProductID.GrasebyF8)
+                            {
+                                if (info.SubChannel == 0)
                                     m_DepleteManager.UpdateDepleteInfo(cmd.RemoteSocket.IP, info.Channel);
                             }
                             else
@@ -2540,7 +2787,7 @@ namespace  AgingSystem
         }
 
         /// <summary>
-        /// 检查泵状态线程执行函数
+        /// 检查泵放电状态线程函数，此函数只操作控制器，与泵无关
         /// </summary>
         /// <param name="para">控制器</param>
         private void ProcCheckDisCharge()
@@ -2633,7 +2880,7 @@ namespace  AgingSystem
         }
 
         /// <summary>
-        /// 检查泵状态线程执行函数
+        /// 检查泵电池耗尽后有没有进行补电函数
         /// </summary>
         /// <param name="para">控制器</param>
         private void ProcCheckReCharge()

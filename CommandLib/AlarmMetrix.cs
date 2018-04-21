@@ -19,6 +19,7 @@ namespace Cmd
         private Hashtable m_AlarmMetrixC8 = new Hashtable();
         private Hashtable m_AlarmMetrix1200 = new Hashtable();
         private Hashtable m_AlarmMetrix1200En = new Hashtable();
+        private Hashtable m_AlarmMetrixC9 = new Hashtable();
 
         public Hashtable AlarmMetrixC6
         {
@@ -56,6 +57,10 @@ namespace Cmd
             get { return m_AlarmMetrix1200En; }
         }
 
+        public Hashtable AlarmMetrixC9
+        {
+            get { return m_AlarmMetrixC9; }
+        }
         
         public static AlarmMetrix Instance()
         {
@@ -210,6 +215,44 @@ namespace Cmd
             m_AlarmMetrixC8.Add((UInt32)0x10000000, "系统出错5");
             m_AlarmMetrixC8.Add((UInt32)0x20000000, "系统出错6");
             m_AlarmMetrixC8.Add((UInt32)0x40000000, "系统出错7");
+
+            //初始化C9报警列表
+            m_AlarmMetrixC9.Add((UInt32)1, "速率超范围");
+            m_AlarmMetrixC9.Add((UInt32)2, "参数未设置");
+            m_AlarmMetrixC9.Add((UInt32)3, "速率超范围");
+            m_AlarmMetrixC9.Add((UInt32)4, "速率未设置");
+            m_AlarmMetrixC9.Add((UInt32)5, "限制量未设置");
+            m_AlarmMetrixC9.Add((UInt32)6, "排气量达到最大值");
+            m_AlarmMetrixC9.Add((UInt32)7, "电池温度异常");
+            m_AlarmMetrixC9.Add((UInt32)8, "该注射器未校准");
+            m_AlarmMetrixC9.Add((UInt32)9, "该注射器型号不支持");
+            m_AlarmMetrixC9.Add((UInt32)10, "剂量超范围");
+            m_AlarmMetrixC9.Add((UInt32)11, "浓度超范围");
+            m_AlarmMetrixC9.Add((UInt32)12, "电池电量低");
+            m_AlarmMetrixC9.Add((UInt32)13, "遗忘操作");
+            m_AlarmMetrixC9.Add((UInt32)14, "即将输注完成");
+            m_AlarmMetrixC9.Add((UInt32)15, "电池耗尽");
+            m_AlarmMetrixC9.Add((UInt32)16, "管路阻塞");
+            m_AlarmMetrixC9.Add((UInt32)17, "输注完成");
+            m_AlarmMetrixC9.Add((UInt32)18, "注射器未正确安装");
+            m_AlarmMetrixC9.Add((UInt32)19, "注射器未正确安装");
+            m_AlarmMetrixC9.Add((UInt32)20, "传动错误");
+            m_AlarmMetrixC9.Add((UInt32)21, "系统错误01");
+            m_AlarmMetrixC9.Add((UInt32)22, "系统错误02");
+            m_AlarmMetrixC9.Add((UInt32)23, "系统错误03");
+            m_AlarmMetrixC9.Add((UInt32)24, "系统错误04");
+            m_AlarmMetrixC9.Add((UInt32)25, "系统错误05");
+            m_AlarmMetrixC9.Add((UInt32)26, "系统错误06");
+            m_AlarmMetrixC9.Add((UInt32)27, "系统错误07");
+            m_AlarmMetrixC9.Add((UInt32)28, "系统错误08");
+            m_AlarmMetrixC9.Add((UInt32)29, "系统错误09");
+            m_AlarmMetrixC9.Add((UInt32)30, "系统错误10");
+            m_AlarmMetrixC9.Add((UInt32)31, "系统错误11");
+            m_AlarmMetrixC9.Add((UInt32)32, "系统错误12");
+            m_AlarmMetrixC9.Add((UInt32)33, "系统错误13");
+            m_AlarmMetrixC9.Add((UInt32)34, "系统错误14");
+            m_AlarmMetrixC9.Add((UInt32)35, "MainFCT未测试");
+            m_AlarmMetrixC9.Add((UInt32)36, "UIFCT未测试");
         }
 
     }
