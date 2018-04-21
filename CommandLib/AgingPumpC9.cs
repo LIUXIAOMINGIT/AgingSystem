@@ -22,10 +22,20 @@ namespace Cmd
             set { m_AlarmList = value; }
         }
 
-
         public AgingPumpC9()
         {
+        }
 
+        /// <summary>
+        /// 添加一条新的ID
+        /// </summary>
+        /// <param name="alarmID"></param>
+        public void AddAlarm(uint alarmID)
+        {
+            if (m_AlarmList == null)
+                m_AlarmList = new List<uint>();
+            if (!m_AlarmList.Contains(alarmID))
+                m_AlarmList.Add(alarmID);
         }
 
         public override string GetAlarmString()

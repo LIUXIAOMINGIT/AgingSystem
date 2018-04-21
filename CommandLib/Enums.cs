@@ -355,6 +355,16 @@ namespace Cmd
     }
 
     /// <summary>
+    /// C9专用
+    /// </summary>
+    public enum C9PumpPowerStatus : byte
+    {
+        External = 0x00,
+        ExternalBattery = 0x01,
+        Battery = 0x02,
+    }
+
+    /// <summary>
     /// 剂量单位
     /// </summary>
     public enum DoseUnit : byte
