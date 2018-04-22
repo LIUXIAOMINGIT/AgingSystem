@@ -431,7 +431,12 @@ namespace  AgingSystem
                     int dockNo = controller.DockNo;
                     AgingDock dock = m_DockList.Find((x) => { return (int)x.Tag == dockNo; });//在每个货架内部保存报警信息
                     if (dock != null)
-                        dock.UpdateAlarmInfo(e as GetAlarm);
+                    {
+                        if (dock.CurrentCustomProductID == CustomProductID.GrasebyC9)
+                            dock.UpdateC9AlarmInfo(e as GetC9Alarm);                          //C9报警信息与其他泵不同，需要分开处理
+                        else
+                            dock.UpdateAlarmInfo(e as GetAlarm);
+                    }
                     else
                         Logger.Instance().ErrorFormat("UploadAlarm()->货架没找到 DockNo={0}", dockNo);
                 }

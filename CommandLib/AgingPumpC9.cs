@@ -38,6 +38,23 @@ namespace Cmd
                 m_AlarmList.Add(alarmID);
         }
 
+        /// <summary>
+        /// 添加一组报警信息，C9泵可能同时出现多个报警
+        /// </summary>
+        /// <param name="alarmIDs"></param>
+        public void AddAlarm(List<uint> alarmIDs)
+        {
+            if (alarmIDs == null || alarmIDs.Count == 0)
+                return;
+            if (m_AlarmList == null)
+                m_AlarmList = new List<uint>();
+            foreach (var id in alarmIDs)
+            {
+                if (!m_AlarmList.Contains(id))
+                    m_AlarmList.Add(id);
+            }
+        }
+
         public override string GetAlarmString()
         {
             CustomProductID cid = ProductIDConvertor.Name2CustomProductID(m_PumpType);
@@ -199,5 +216,33 @@ namespace Cmd
                 m_AlarmOccurredTime.Add(alarmID, DateTime.Now);
             }
         }
+
+        /// <summary>
+        /// 更新报警首次出现的时间
+        /// </summary>
+        /// <param name="alarmIDs"></param>
+        public void UpdateAlarmTime(List<uint> alarmIDs)
+        {
+            if (alarmIDs == null || alarmIDs.Count == 0)
+                return;
+            DateTime ocurredTime = DateTime.MinValue;
+            foreach (var id in alarmIDs)
+            {
+                if (m_AlarmOccurredTime.ContainsKey(id))
+                {
+                    ocurredTime = (DateTime)m_AlarmOccurredTime[id];
+                    if (ocurredTime.Year < 2000)
+                    {
+                        m_AlarmOccurredTime[id] = DateTime.Now;
+                    }
+                }
+                else
+                {
+                    m_AlarmOccurredTime.Add(id, DateTime.Now);
+                }
+            }
+        }
+
+
     }
 }
