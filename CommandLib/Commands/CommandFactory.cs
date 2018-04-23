@@ -16,7 +16,7 @@ namespace Cmd
     /// </summary>
     public class CommandFactory
     {
-        public static BaseCommand CreateCommand(byte messageID)
+        public static BaseCommand CreateCommand(byte messageID, bool isC9 = false)
         {
             BaseCommand cmd = null;
             switch (messageID)
@@ -40,7 +40,10 @@ namespace Cmd
                     cmd = new CmdFinishAging();
                     break;
                 case 0x0007:
-                    cmd = new GetAlarm();
+                    if (isC9)
+                        cmd = new GetC9Alarm();
+                    else
+                        cmd = new GetAlarm();
                     break;
                 case 0x0008:
                     cmd = new CmdGetPumpStatus();

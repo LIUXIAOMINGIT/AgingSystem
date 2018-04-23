@@ -41,42 +41,41 @@ namespace WifiSimulator
             set { m_SendFlag = value; }
         }
 
-
         public Graseby(AsyncClient client)
         {
             m_Client = client;
         }
 
-        public List<byte> CreateSinglePumpAlarm(byte chanel)
-        {
-            List<byte> single = new List<byte>();
+        //public virtual List<byte> CreateSinglePumpAlarm(byte chanel)
+        //{
+        //    List<byte> single = new List<byte>();
 
-            single.Add(chanel);
-            //泵电源状态
-            single.Add(0x55);
-            single.Add(0xAA);
-            single.Add(0x05);
-            single.Add(0x00);
-            single.Add(0x00);
-            single.Add(0x58);
-            single.Add(0x01);
-            single.Add(0x00);
-            single.Add(0xFF);
-            //报警
-            single.Add(0x55);
-            single.Add(0xAA);
-            single.Add(0x05);
-            single.Add(0x03);
-            single.Add(0x00);
-            single.Add(0x57);
-            single.Add(0x04);
-            single.Add(0xFF);
-            single.Add(0xFF);
-            single.Add(0xFF);
-            single.Add(0xFF);
-            single.Add(0xEE);
-            return single;
-        }
+        //    single.Add(chanel);
+        //    //泵电源状态
+        //    single.Add(0x55);
+        //    single.Add(0xAA);
+        //    single.Add(0x05);
+        //    single.Add(0x00);
+        //    single.Add(0x00);
+        //    single.Add(0x58);
+        //    single.Add(0x01);
+        //    single.Add(0x00);
+        //    single.Add(0xFF);
+        //    //报警
+        //    single.Add(0x55);
+        //    single.Add(0xAA);
+        //    single.Add(0x05);
+        //    single.Add(0x03);
+        //    single.Add(0x00);
+        //    single.Add(0x57);
+        //    single.Add(0x04);
+        //    single.Add(0xFF);
+        //    single.Add(0xFF);
+        //    single.Add(0xFF);
+        //    single.Add(0xFF);
+        //    single.Add(0xEE);
+        //    return single;
+        //}
 
         /// <summary>
         /// 一个泵的报警
@@ -84,7 +83,7 @@ namespace WifiSimulator
         /// <param name="chanel"></param>
         /// <param name="alarm"></param>
         /// <returns></returns>
-        public List<byte> CreateSinglePumpAlarm(byte chanel, uint alarm)
+        public virtual List<byte> CreateSinglePumpAlarm(byte chanel, uint alarm)
         {
             List<byte> single = new List<byte>();
 
@@ -118,29 +117,29 @@ namespace WifiSimulator
             return single;
         }
 
-        public List<byte> CreatePumpAlarmPackage(uint alarm, int pumpCount = 6)
-        {
-            List<byte> package = new List<byte>();
-            package.Add(0x00);
-            package.Add(0x07);
-            package.Add(0x16);
-            //数据长度
-            package.Add((byte)(pumpCount * 22));
-            package.Add(0x00);
+        //public virtual List<byte> CreatePumpAlarmPackage(uint alarm, int pumpCount = 6)
+        //{
+        //    List<byte> package = new List<byte>();
+        //    package.Add(0x00);
+        //    package.Add(0x07);
+        //    package.Add(0x16);
+        //    //数据长度
+        //    package.Add((byte)(pumpCount * 22));
+        //    package.Add(0x00);
 
-            //数据长度取反
-            package.Add((byte)((byte)0xFF - (byte)(pumpCount * 22)));
-            package.Add(0xFF);
+        //    //数据长度取反
+        //    package.Add((byte)((byte)0xFF - (byte)(pumpCount * 22)));
+        //    package.Add(0xFF);
 
-            for (int i = 0; i < pumpCount; i++)
-                package.AddRange(CreateSinglePumpAlarm((byte)(i + 1), alarm));
-            //泵电源状态
-            package.Add(0x02);
-            package.Add(0x00);
-            package.Add(0x00);
-            package.Add(0xEE);
-            return package;
-        }
+        //    for (int i = 0; i < pumpCount; i++)
+        //        package.AddRange(CreateSinglePumpAlarm((byte)(i + 1), alarm));
+        //    //泵电源状态
+        //    package.Add(0x02);
+        //    package.Add(0x00);
+        //    package.Add(0x00);
+        //    package.Add(0xEE);
+        //    return package;
+        //}
 
         /// <summary>
         /// 构建报警的泵数据
@@ -149,7 +148,7 @@ namespace WifiSimulator
         /// <param name="alarm">具体是哪项报警</param>
         /// <param name="pumpCount">上报泵的总数</param>
         /// <returns></returns>
-        public List<byte> CreatePumpAlarmPackageEx(List<int> pumpIndexs, uint alarm, int pumpCount = 6)
+        public virtual List<byte> CreatePumpAlarmPackageEx(List<int> pumpIndexs, uint alarm, int pumpCount = 6)
         {
             List<byte> package = new List<byte>();
             package.Add(0x00);
@@ -179,30 +178,30 @@ namespace WifiSimulator
             return package;
         }
 
-        public List<byte> CreatePumpAlarmPackage(int pumpCount = 6)
-        {
-            List<byte> package = new List<byte>();
-            package.Add(0x00);
-            package.Add(0x07);
-            package.Add(0x16);
+        //public virtual List<byte> CreatePumpAlarmPackage(int pumpCount = 6)
+        //{
+        //    List<byte> package = new List<byte>();
+        //    package.Add(0x00);
+        //    package.Add(0x07);
+        //    package.Add(0x16);
 
-            //数据长度
-            package.Add((byte)(pumpCount * 22));
-            package.Add(0x00);
+        //    //数据长度
+        //    package.Add((byte)(pumpCount * 22));
+        //    package.Add(0x00);
 
-            //数据长度取反
-            package.Add((byte)((byte)0xFF - (byte)(pumpCount * 22)));
-            package.Add(0xFF);
+        //    //数据长度取反
+        //    package.Add((byte)((byte)0xFF - (byte)(pumpCount * 22)));
+        //    package.Add(0xFF);
 
-            for (int i = 0; i < pumpCount; i++)
-                package.AddRange(CreateSinglePumpAlarm((byte)(i + 1)));
-            //泵电源状态
-            package.Add(0x02);
-            package.Add(0x00);
-            package.Add(0x00);
-            package.Add(0xEE);
-            return package;
-        }
+        //    for (int i = 0; i < pumpCount; i++)
+        //        package.AddRange(CreateSinglePumpAlarm((byte)(i + 1)));
+        //    //泵电源状态
+        //    package.Add(0x02);
+        //    package.Add(0x00);
+        //    package.Add(0x00);
+        //    package.Add(0xEE);
+        //    return package;
+        //}
 
         /// <summary>
         /// 构建F8双道泵报警的泵数据

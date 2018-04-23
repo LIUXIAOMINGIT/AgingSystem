@@ -416,17 +416,22 @@ namespace Analyse
             byte[] cmdBytes = null;
             lock(CommandBuffer)
             { 
-                if(CommandBuffer.Count<11)
+                if(CommandBuffer.Count<10)
                 { 
-                    Logger.Instance().Error("CreateCommand() Error! CommandBuffer.Count<11");
+                    Logger.Instance().Error("CreateCommand() Error! CommandBuffer.Count<10");
                     return null;
                 }
                 cmdBytes = new byte[CommandBuffer.Count];
                 CommandBuffer.CopyTo(cmdBytes);
             }
             byte msgID = cmdBytes[1];
-
-            BaseCommand cmd = CommandFactory.CreateCommand(msgID);
+            byte packageSize = cmdBytes[2];
+            BaseCommand cmd = null;
+            //C9单包数据长度为6
+            if(packageSize==6)
+                cmd = CommandFactory.CreateCommand(msgID, true);
+            else
+                cmd = CommandFactory.CreateCommand(msgID, false);
             if(cmd==null)
             {
                 string msg = string.Format("CreateCommand() Error! MessageID={0}", msgID);
@@ -864,25 +869,6 @@ namespace Analyse
         /// <param name="e"></param>
         public void CommandResponse(object sender, EventArgs e)
         {
-            //if(e is CmdUploadSN)
-            //{
-            //    CmdUploadSN cmd = e as CmdUploadSN;
-            //    ushort sn =  cmd.SerialNo;
-            //    //string strSN = Encoding.Default.GetString(sn, 0, sn.Length);
-            //    //System.Diagnostics.Debug.WriteLine(cmd.SN.Count);
-            //    Controller controller = SNManager.Instance().Get(sn);
-            //    if (controller != null)
-            //    {
-            //        controller.SocketToken = cmd.RemoteSocket;
-            //        if (SocketConnectOrCloseResponse != null)
-            //            SocketConnectOrCloseResponse(this, new SocketConnectArgs(true, cmd.RemoteSocket));
-            //    }
-            //    else
-            //    {
-            //        Logger.Instance().ErrorFormat("CommandResponse()->SNManager.Instance().Get 错误，sn={0}", sn);
-            //        return;
-            //    }
-            //}
         }
 
         /// <summary>

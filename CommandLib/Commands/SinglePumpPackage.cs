@@ -74,18 +74,16 @@ namespace Cmd
 
         public SingleC9PumpPackage(byte[] data)
         {
-            if (data.Length != 2222)//C9的单泵数据包格式还没有定义。此处长度未知
+            if (data.Length != 6)//C9的单泵数据包长度6
             {
-                Logger.Instance().ErrorFormat("单泵信息有误，长度不等于22字节,data={0}", data.Length);
+                Logger.Instance().ErrorFormat("单泵信息有误，长度不等于6字节,data={0}", data.Length);
             }
             else
             {
                 m_Chanel = data[0];
-                byte[] tempPower = new byte[9];
-                Array.Copy(data, 1, tempPower, 0, 9);
-                m_C9Power = new C9PowerInfo(tempPower);
-                byte[] tempAlarm = new byte[12];
-                Array.Copy(data, 10, tempAlarm, 0, 12);
+                m_C9Power = new C9PowerInfo(data[1]);
+                byte[] tempAlarm = new byte[4];
+                Array.Copy(data, 2, tempAlarm, 0, 4);
                 m_C9Alarm = new C9AlarmInfo(tempAlarm);
             }
         }
@@ -163,37 +161,16 @@ namespace Cmd
             set { m_C9PowerStatus = value; }
         }
 
-         public C9PowerInfo() { }
+        public C9PowerInfo() { }
 
-         public C9PowerInfo(byte[] data)
+        public C9PowerInfo(byte data)
         {
-            if (data.Length != 22222)
-            {
-                Logger.Instance().Error("PowerInfo实例化失败，没有9个字节！");
-            }
+            if (Enum.IsDefined(typeof(C9PumpPowerStatus), data))
+                m_C9PowerStatus = (C9PumpPowerStatus)data;
             else
-            {
-                m_Head[0] = data[0];
-                m_Head[1] = data[1];
-                m_Length = data[2];
-                //m_PID         =(ProductID)data[3];
-                m_Pump2PC = data[4];
-                m_MessageID = data[5];
-                m_AppDC = data[6];
-                if (Enum.IsDefined(typeof(PumpPowerStatus), data[7]))
-                {
-                    m_PowerStatus = (PumpPowerStatus)data[7];
-                }
-                else
-                {
-                    m_PowerStatus = PumpPowerStatus.External;
-                }
-                m_CheckCode = data[8];
-            }
+                m_C9PowerStatus = C9PumpPowerStatus.External;
         }
-
     }
-
 
     public class AlarmInfo
     {
@@ -268,28 +245,20 @@ namespace Cmd
             set { m_AlarmList = value; }
         }
 
-          public C9AlarmInfo() { }
+        public C9AlarmInfo() { }
 
-          public C9AlarmInfo(byte[] data)
+        public C9AlarmInfo(byte[] data)
         {
-            if (data.Length != 22222)
+            if (data.Length != 4)
             {
-                Logger.Instance().Error("AlarmInfo实例化失败，没有12个字节！");
+                Logger.Instance().Error("C9AlarmInfo实例化失败，没有4个字节！");
             }
             else
             {
-                m_Head[0] = data[0];
-                m_Head[1] = data[1];
-                m_Length = data[2];
-                //m_PID         =    (ProductID)data[3];
-                m_Pump2PC = data[4];
-                m_MessageID = data[5];
-                m_AppDC = data[6];
-                m_Alarm = (uint)(data[7] & 0x000000FF);
-                m_Alarm += (uint)(data[8] << 8 & 0x0000FF00);
-                m_Alarm += (uint)(data[9] << 16 & 0x00FF0000);
-                m_Alarm += (uint)(data[10] << 24 & 0xFF000000);
-                m_CheckCode = data[11];
+                m_AlarmList.Add(data[0]);
+                m_AlarmList.Add(data[1]);
+                m_AlarmList.Add(data[2]);
+                m_AlarmList.Add(data[3]);
             }
         }
     }
