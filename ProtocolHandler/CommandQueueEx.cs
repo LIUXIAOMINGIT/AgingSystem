@@ -49,7 +49,7 @@ namespace Analyse
                 if (!m_SocketQueueHash.ContainsKey(ip))
                 {
                     m_SocketQueueHash.Add(ip, new Queue<BaseCommand>());
-                    Logger.Instance().DebugFormat("创建了一个新的发送队列，ip={0}", ip);
+                    Logger.Instance().DebugFormat("创建了一个新的发送队列，ip={0}", ControllerManager.Long2IP(ip));
                 }
                 Queue<BaseCommand> queue = m_SocketQueueHash[ip] as Queue<BaseCommand>;
                 queue.Enqueue(item);
@@ -131,7 +131,7 @@ namespace Analyse
                 if (m_SocketQueueHash.ContainsKey(ip))
                 {
                     m_SocketQueueHash.Remove(ip);
-                    Logger.Instance().DebugFormat("清除了一个发送队列，ip={0}", ip);
+                    Logger.Instance().DebugFormat("清除了一个发送队列，ip={0}", ControllerManager.Long2IP(ip));
                 }
             }
         }
@@ -157,7 +157,7 @@ namespace Analyse
             if (!m_SocketQueueHash.ContainsKey(ip))
             {
                 m_SocketQueueHash.Add(ip, new Queue<BaseCommand>());
-                Logger.Instance().DebugFormat("创建了一个新的发送队列，ip={0}", ip);
+                Logger.Instance().DebugFormat("创建了一个新的发送队列，ip={0}", ControllerManager.Long2IP(ip));
             }
         }
 

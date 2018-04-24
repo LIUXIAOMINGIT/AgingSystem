@@ -108,7 +108,7 @@ namespace Analyse
                 if (m_WaitSocketQueueHash.ContainsKey(ip))
                 {
                     m_WaitSocketQueueHash.Remove(ip);
-                    Logger.Instance().DebugFormat("清除了一个等待队列，ip={0}", ip);
+                    Logger.Instance().DebugFormat("清除了一个等待队列，ip={0}", ControllerManager.Long2IP(ip));
                 }
             }
         }
@@ -133,7 +133,7 @@ namespace Analyse
                 if (!m_WaitSocketQueueHash.ContainsKey(ip))
                 {
                     m_WaitSocketQueueHash.Add(ip, new Queue<BaseCommand>());
-                    Logger.Instance().DebugFormat("创建了一个新的等待队列，ip={0}", ip);
+                    Logger.Instance().DebugFormat("创建了一个新的等待队列，ip={0}", ControllerManager.Long2IP(ip));
                 }
              }
         }

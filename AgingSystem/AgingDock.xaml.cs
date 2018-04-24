@@ -1646,7 +1646,8 @@ namespace  AgingSystem
                         //除了低电和耗尽等是否有其他报警，有则显示红色
                         int findIndex = package.C9Alarm.AlarmList.FindIndex((x) =>
                         {
-                            return x != completeArmIndex
+                            return x > 0
+                                && x != completeArmIndex
                                 && x != willCompleteArmIndex
                                 && x != forgetStartAlarmIndex
                                 && x != lowVolArmIndex
@@ -1700,7 +1701,8 @@ namespace  AgingSystem
                         //除了低电和耗尽等是否有其他报警，有则显示红色
                         int findIndex = package.C9Alarm.AlarmList.FindIndex((x) =>
                         {
-                            return x != completeArmIndex
+                            return x > 0
+                                && x != completeArmIndex
                                 && x != willCompleteArmIndex
                                 && x != forgetStartAlarmIndex
                                 && x != lowVolArmIndex
@@ -2157,6 +2159,8 @@ namespace  AgingSystem
                                     //耗尽时间≥30min，放电至欠压报警(低电压时间)≥5.75H，总放电时间（放电至欠压报警时间）≥6.5H
                                     //• Graseby F8
                                     //耗尽时间≥30min，放电至欠压报警(低电压时间)≥4.75H，总放电时间（放电至欠压报警时间）≥5.5H 
+                                    //• Graseby 1200
+                                    //耗尽时间≥30min，放电至欠压报警(低电压时间)≥3H，总放电时间（放电至欠压报警时间）≥5.5H
                                     bool isBatteryOK = true;
                                     switch (m_CurrentCustomProductID)
                                     {
@@ -2210,6 +2214,7 @@ namespace  AgingSystem
                                             }
                                             break;
                                         case CustomProductID.GrasebyC8:
+                                        case CustomProductID.GrasebyC9:
                                             if ((pumpList[j].BeginBattaryDepleteTime - pumpList[j].BeginDischargeTime).TotalHours >= 6.5 /*总放电时间*/
                                             && (pumpList[j].BeginBattaryDepleteTime - pumpList[j].BeginLowVoltageTime).TotalMinutes >= 30 /*耗尽时间*/
                                             && (pumpList[j].BeginLowVoltageTime - pumpList[j].BeginDischargeTime).TotalMinutes >= 345) /*低电压时间*/
@@ -2227,6 +2232,21 @@ namespace  AgingSystem
                                             if ((pumpList[j].BeginBattaryDepleteTime - pumpList[j].BeginDischargeTime).TotalHours >= 5.5 /*总放电时间*/
                                             && (pumpList[j].BeginBattaryDepleteTime - pumpList[j].BeginLowVoltageTime).TotalMinutes >= 30 /*耗尽时间*/
                                             && (pumpList[j].BeginLowVoltageTime - pumpList[j].BeginDischargeTime).TotalMinutes >= 285) /*低电压时间*/
+                                            {
+                                                worksheet.Cells[rowIndex, ++index] = "合格";
+                                                isBatteryOK = true;
+                                            }
+                                            else
+                                            {
+                                                worksheet.Cells[rowIndex, ++index] = "不合格";
+                                                isBatteryOK = false;
+                                            }
+                                            break;
+                                        case CustomProductID.Graseby1200:
+                                        case CustomProductID.Graseby1200En:
+                                            if ((pumpList[j].BeginBattaryDepleteTime - pumpList[j].BeginDischargeTime).TotalHours >= 5.5 /*总放电时间*/
+                                            && (pumpList[j].BeginBattaryDepleteTime - pumpList[j].BeginLowVoltageTime).TotalMinutes >= 30 /*耗尽时间*/
+                                            && (pumpList[j].BeginLowVoltageTime - pumpList[j].BeginDischargeTime).TotalMinutes >= 180) /*低电压时间*/
                                             {
                                                 worksheet.Cells[rowIndex, ++index] = "合格";
                                                 isBatteryOK = true;
@@ -2874,7 +2894,7 @@ namespace  AgingSystem
                         if (m_CurrentCustomProductID == CustomProductID.GrasebyF6_Double || m_CurrentCustomProductID == CustomProductID.WZS50F6_Double)
                             channels &= 0x55; //二进制01010101，奇数串口位接1通道
                         m_CmdManager.SendCmdRecharge(channels, depleteController.SocketToken, CommandResponseForReCharge);
-                        Logger.Instance().InfoFormat("向IP={0}的控制器发送补电命令，通道号={1}", depleteController.IP, channels);
+                        Logger.Instance().InfoFormat("向IP={0}的控制器发送补电命令，通道号=0x{1}", ControllerManager.Long2IP(depleteController.IP), channels.ToString("X2"));
                     }
                 }
                 Thread.Sleep(5000);
@@ -2891,7 +2911,7 @@ namespace  AgingSystem
             if (e is CmdRecharge)
             {
                 CmdRecharge cmd = e as CmdRecharge;
-                Logger.Instance().InfoFormat("收到控制器IP={0}的补电回应", cmd.RemoteSocket.IP);
+                Logger.Instance().InfoFormat("收到控制器IP={0}的补电回应", cmd.RemoteSocket.IPString);
                 Controller depleteController = m_Controllers.Find((x) => { return x.SocketToken!=null && x.SocketToken.IP == cmd.RemoteSocket.IP; });
                 DepletePumpList pumpList = null;
                 lock (m_DepleteManager)
@@ -2919,7 +2939,7 @@ namespace  AgingSystem
                     {
                         pump.BeginRechargeTime = DateTime.Now;
                         pump.AgingStatus = EAgingStatus.Recharging;
-                        Logger.Instance().InfoFormat("货架编号={0},控制器IP={1},通道号={2}的泵已经补电", pump.DockNo, cmd.RemoteSocket.IP, pump.Channel);
+                        Logger.Instance().InfoFormat("货架编号={0},控制器IP={1},通道号={2}的泵已经补电", pump.DockNo, cmd.RemoteSocket.IPString, pump.Channel);
                         //graseby1200ChannelBit |= (byte)(1 << pump.Channel-1);
                         if (m_CurrentCustomProductID == CustomProductID.Graseby1200 || m_CurrentCustomProductID == CustomProductID.Graseby1200En)
                         {
@@ -2931,7 +2951,7 @@ namespace  AgingSystem
                     }
                     else
                     {
-                        Logger.Instance().InfoFormat("CommandResponseForReCharge()->泵对象为null 控制器IP={0} 通道号={1}", cmd.RemoteSocket.IP, ch);
+                        Logger.Instance().InfoFormat("CommandResponseForReCharge()->泵对象为null 控制器IP={0} 通道号={1}", cmd.RemoteSocket.IPString, ch);
                     }
 
                     AgingPump pumpSecond = null;
@@ -2954,11 +2974,11 @@ namespace  AgingSystem
                             {
                                 pumpSecond.BeginRechargeTime = DateTime.Now;
                                 pumpSecond.AgingStatus = EAgingStatus.Recharging;
-                                Logger.Instance().InfoFormat("货架编号={0},控制器IP={1},通道号={2}的泵已经补电", pumpSecond.DockNo, cmd.RemoteSocket.IP, pumpSecond.Channel);
+                                Logger.Instance().InfoFormat("货架编号={0},控制器IP={1},通道号={2}的泵已经补电", pumpSecond.DockNo, cmd.RemoteSocket.IPString, pumpSecond.Channel);
                             }
                             else
                             {
-                                Logger.Instance().InfoFormat("CommandResponseForReCharge()->pumpSecond泵对象为null 控制器IP={0} 通道号={1}", cmd.RemoteSocket.IP, ch);
+                                Logger.Instance().InfoFormat("CommandResponseForReCharge()->pumpSecond泵对象为null 控制器IP={0} 通道号={1}", cmd.RemoteSocket.IPString, ch);
                             }
                         }
                     }
@@ -2979,11 +2999,11 @@ namespace  AgingSystem
                         {
                             pumpSecond.BeginRechargeTime = DateTime.Now;
                             pumpSecond.AgingStatus = EAgingStatus.Recharging;
-                            Logger.Instance().InfoFormat("货架编号={0},控制器IP={1},通道号={2}, 双道中的第{3}道泵已经补电", pumpSecond.DockNo, cmd.RemoteSocket.IP, pumpSecond.Channel, pumpSecond.SubChannel+1);
+                            Logger.Instance().InfoFormat("货架编号={0},控制器IP={1},通道号={2}, 双道中的第{3}道泵已经补电", pumpSecond.DockNo, cmd.RemoteSocket.IPString, pumpSecond.Channel, pumpSecond.SubChannel+1);
                         }
                         else
                         {
-                            Logger.Instance().InfoFormat("CommandResponseForReCharge()-> GrasebyF8 pumpSecond泵对象为null 控制器IP={0} 通道号={1}", cmd.RemoteSocket.IP, ch);
+                            Logger.Instance().InfoFormat("CommandResponseForReCharge()-> GrasebyF8 pumpSecond泵对象为null 控制器IP={0} 通道号={1}", cmd.RemoteSocket.IPString, ch);
                         }
                     }
                     #endregion

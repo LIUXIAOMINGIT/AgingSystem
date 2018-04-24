@@ -110,7 +110,6 @@ namespace Cmd
             #region //查询所属报警的映射表
             switch (pid)
             {
-
                 case ProductID.GrasebyC9:
                     alarmMetrix = AlarmMetrix.Instance().AlarmMetrixC9;
                     break;
@@ -122,20 +121,22 @@ namespace Cmd
                 return "";
             StringBuilder sb = new StringBuilder();
             DateTime ocurredTime = DateTime.MinValue;
-            foreach (DictionaryEntry dic in alarmMetrix)
+            foreach (var id in m_AlarmList)
             {
-                uint alarmID = (uint)dic.Key;
-                if (m_AlarmOccurredTime.ContainsKey(alarmID))
+                if (id > 0)
                 {
-                    ocurredTime = (DateTime)m_AlarmOccurredTime[alarmID];
-                    if (ocurredTime.Year > 2000)
+                    if (m_AlarmOccurredTime.ContainsKey(id))
                     {
-                        sb.Append(ocurredTime.ToString("yyyy-MM-dd HH:mm:ss"));
-                        sb.Append("->");
+                        ocurredTime = (DateTime)m_AlarmOccurredTime[id];
+                        if (ocurredTime.Year > 2000)
+                        {
+                            sb.Append(ocurredTime.ToString("yyyy-MM-dd HH:mm:ss"));
+                            sb.Append("->");
+                        }
                     }
+                    sb.Append(alarmMetrix[id] as string);
+                    sb.Append("\n");
                 }
-                sb.Append(dic.Value);
-                sb.Append("\n");
             }
             return sb.ToString().TrimEnd('\n');
         }
@@ -173,7 +174,7 @@ namespace Cmd
                     break;
             }
             #endregion
-            if (depletealArmIndex == 0
+            if (  depletealArmIndex == 0
                || lowVolArmIndex == 0
                || completeArmIndex == 0
                || willCompleteArmIndex == 0
@@ -184,7 +185,8 @@ namespace Cmd
             }
             int findIndex = m_AlarmList.FindIndex((x) =>
             {
-                return x != depletealArmIndex 
+                return x > 0
+                    && x != depletealArmIndex 
                     && x != lowVolArmIndex
                     && x != completeArmIndex
                     && x != willCompleteArmIndex
