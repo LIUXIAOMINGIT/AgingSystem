@@ -76,6 +76,10 @@ namespace WifiSimulator
                     m_ProductID = ProductID.GrasebyF8;
                     m_Pump = new F8(m_Client);
                     break;
+                case ProductID.GrasebyC9:
+                    m_ProductID = ProductID.GrasebyC9;
+                    m_Pump = new C9(m_Client);
+                    break;
                 default:
                     m_ProductID = ProductID.GrasebyC8;
                     m_Pump = new C8(m_Client);
@@ -1080,6 +1084,45 @@ namespace WifiSimulator
             pumpTypeResponseFlag = 2;
         }
         #endregion
+
+        private void btnC9ResponsePumpType_Click(object sender, EventArgs e)
+        {
+            pumpTypeResponseFlag = 1;
+        }
+
+        private void btnC9StopAll_Click(object sender, EventArgs e)
+        {
+            pumpTypeResponseFlag = 2;
+
+        }
+
+        private void btnC9LowAlarmSingle_Click(object sender, EventArgs e)
+        {
+            m_SendFlag = 1;
+            this.m_Pump.SendFlag = m_SendFlag;
+            StartTimer();
+        }
+
+        private void btnC9LowVolC8Single_Click(object sender, EventArgs e)
+        {
+            m_SendFlag = 2;
+            this.m_Pump.SendFlag = m_SendFlag;
+            StartTimer();
+        }
+
+        private void btnC9DelepeC8Single_Click(object sender, EventArgs e)
+        {
+            m_SendFlag = 3;
+            this.m_Pump.SendFlag = m_SendFlag;
+            StartTimer();
+        }
+
+        private void btnC9NoAlarmC8Single_Click(object sender, EventArgs e)
+        {
+            m_SendFlag = 0;
+            this.m_Pump.SendFlag = m_SendFlag;
+            StartTimer();
+        }
 
     }
 }

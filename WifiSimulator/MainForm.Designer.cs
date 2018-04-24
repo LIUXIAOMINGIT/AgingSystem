@@ -93,6 +93,13 @@
             this.btnF8LowVolC8Single = new System.Windows.Forms.Button();
             this.btnF8NoAlarmC8Single = new System.Windows.Forms.Button();
             this.btnF8DelepeC8Single = new System.Windows.Forms.Button();
+            this.tabC9 = new System.Windows.Forms.TabPage();
+            this.btnC9ResponsePumpType = new System.Windows.Forms.Button();
+            this.btnC9StopAll = new System.Windows.Forms.Button();
+            this.btnC9LowAlarmSingle = new System.Windows.Forms.Button();
+            this.btnC9LowVolC8Single = new System.Windows.Forms.Button();
+            this.btnC9NoAlarmC8Single = new System.Windows.Forms.Button();
+            this.btnC9DelepeC8Single = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.pnlCheckBoxs.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -100,6 +107,7 @@
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.tabPage4.SuspendLayout();
+            this.tabC9.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnHighAlarm
@@ -489,6 +497,7 @@
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage4);
+            this.tabControl1.Controls.Add(this.tabC9);
             this.tabControl1.Location = new System.Drawing.Point(8, 151);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
@@ -784,6 +793,82 @@
             this.btnF8DelepeC8Single.UseVisualStyleBackColor = true;
             this.btnF8DelepeC8Single.Click += new System.EventHandler(this.btnF8DelepeC8Single_Click);
             // 
+            // tabC9
+            // 
+            this.tabC9.Controls.Add(this.btnC9LowVolC8Single);
+            this.tabC9.Controls.Add(this.btnC9NoAlarmC8Single);
+            this.tabC9.Controls.Add(this.btnC9DelepeC8Single);
+            this.tabC9.Controls.Add(this.btnC9LowAlarmSingle);
+            this.tabC9.Controls.Add(this.btnC9StopAll);
+            this.tabC9.Controls.Add(this.btnC9ResponsePumpType);
+            this.tabC9.Location = new System.Drawing.Point(4, 22);
+            this.tabC9.Name = "tabC9";
+            this.tabC9.Padding = new System.Windows.Forms.Padding(3);
+            this.tabC9.Size = new System.Drawing.Size(665, 333);
+            this.tabC9.TabIndex = 4;
+            this.tabC9.Text = "C9";
+            this.tabC9.UseVisualStyleBackColor = true;
+            // 
+            // btnC9ResponsePumpType
+            // 
+            this.btnC9ResponsePumpType.Location = new System.Drawing.Point(479, 26);
+            this.btnC9ResponsePumpType.Name = "btnC9ResponsePumpType";
+            this.btnC9ResponsePumpType.Size = new System.Drawing.Size(75, 40);
+            this.btnC9ResponsePumpType.TabIndex = 17;
+            this.btnC9ResponsePumpType.Text = "全部启动";
+            this.btnC9ResponsePumpType.UseVisualStyleBackColor = true;
+            this.btnC9ResponsePumpType.Click += new System.EventHandler(this.btnC9ResponsePumpType_Click);
+            // 
+            // btnC9StopAll
+            // 
+            this.btnC9StopAll.Location = new System.Drawing.Point(479, 84);
+            this.btnC9StopAll.Name = "btnC9StopAll";
+            this.btnC9StopAll.Size = new System.Drawing.Size(75, 33);
+            this.btnC9StopAll.TabIndex = 18;
+            this.btnC9StopAll.Text = "全部停止";
+            this.btnC9StopAll.UseVisualStyleBackColor = true;
+            this.btnC9StopAll.Click += new System.EventHandler(this.btnC9StopAll_Click);
+            // 
+            // btnC9LowAlarmSingle
+            // 
+            this.btnC9LowAlarmSingle.Location = new System.Drawing.Point(331, 31);
+            this.btnC9LowAlarmSingle.Name = "btnC9LowAlarmSingle";
+            this.btnC9LowAlarmSingle.Size = new System.Drawing.Size(108, 47);
+            this.btnC9LowAlarmSingle.TabIndex = 19;
+            this.btnC9LowAlarmSingle.Text = "发送低字节报警";
+            this.btnC9LowAlarmSingle.UseVisualStyleBackColor = true;
+            this.btnC9LowAlarmSingle.Click += new System.EventHandler(this.btnC9LowAlarmSingle_Click);
+            // 
+            // btnC9LowVolC8Single
+            // 
+            this.btnC9LowVolC8Single.Location = new System.Drawing.Point(331, 84);
+            this.btnC9LowVolC8Single.Name = "btnC9LowVolC8Single";
+            this.btnC9LowVolC8Single.Size = new System.Drawing.Size(108, 48);
+            this.btnC9LowVolC8Single.TabIndex = 20;
+            this.btnC9LowVolC8Single.Text = "C9低电报警";
+            this.btnC9LowVolC8Single.UseVisualStyleBackColor = true;
+            this.btnC9LowVolC8Single.Click += new System.EventHandler(this.btnC9LowVolC8Single_Click);
+            // 
+            // btnC9NoAlarmC8Single
+            // 
+            this.btnC9NoAlarmC8Single.Location = new System.Drawing.Point(331, 192);
+            this.btnC9NoAlarmC8Single.Name = "btnC9NoAlarmC8Single";
+            this.btnC9NoAlarmC8Single.Size = new System.Drawing.Size(108, 48);
+            this.btnC9NoAlarmC8Single.TabIndex = 21;
+            this.btnC9NoAlarmC8Single.Text = "C9无报警";
+            this.btnC9NoAlarmC8Single.UseVisualStyleBackColor = true;
+            this.btnC9NoAlarmC8Single.Click += new System.EventHandler(this.btnC9NoAlarmC8Single_Click);
+            // 
+            // btnC9DelepeC8Single
+            // 
+            this.btnC9DelepeC8Single.Location = new System.Drawing.Point(331, 138);
+            this.btnC9DelepeC8Single.Name = "btnC9DelepeC8Single";
+            this.btnC9DelepeC8Single.Size = new System.Drawing.Size(108, 48);
+            this.btnC9DelepeC8Single.TabIndex = 22;
+            this.btnC9DelepeC8Single.Text = "C9耗尽电报警";
+            this.btnC9DelepeC8Single.UseVisualStyleBackColor = true;
+            this.btnC9DelepeC8Single.Click += new System.EventHandler(this.btnC9DelepeC8Single_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -812,6 +897,7 @@
             this.tabPage2.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
+            this.tabC9.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -884,6 +970,13 @@
         private System.Windows.Forms.Button btnF8LowVolC8Single;
         private System.Windows.Forms.Button btnF8NoAlarmC8Single;
         private System.Windows.Forms.Button btnF8DelepeC8Single;
+        private System.Windows.Forms.TabPage tabC9;
+        private System.Windows.Forms.Button btnC9ResponsePumpType;
+        private System.Windows.Forms.Button btnC9StopAll;
+        private System.Windows.Forms.Button btnC9LowAlarmSingle;
+        private System.Windows.Forms.Button btnC9LowVolC8Single;
+        private System.Windows.Forms.Button btnC9NoAlarmC8Single;
+        private System.Windows.Forms.Button btnC9DelepeC8Single;
     }
 }
 
