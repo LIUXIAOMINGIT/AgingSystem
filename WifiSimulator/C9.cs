@@ -9,11 +9,9 @@ namespace WifiSimulator
 {
     public class C9 : Graseby
     {
-
         public C9(AsyncClient client)
             : base(client)
         {
-
         }
 
         public override List<byte> CreateSinglePumpAlarm(byte chanel, uint alarm)
@@ -29,7 +27,6 @@ namespace WifiSimulator
             single.Add(0);
             return single;
         }
-
 
         public override List<byte> CreatePumpAlarmPackageEx(List<int> pumpIndexs, uint alarm, int pumpCount = 6)
         {
