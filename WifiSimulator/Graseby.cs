@@ -46,37 +46,7 @@ namespace WifiSimulator
             m_Client = client;
         }
 
-        //public virtual List<byte> CreateSinglePumpAlarm(byte chanel)
-        //{
-        //    List<byte> single = new List<byte>();
-
-        //    single.Add(chanel);
-        //    //泵电源状态
-        //    single.Add(0x55);
-        //    single.Add(0xAA);
-        //    single.Add(0x05);
-        //    single.Add(0x00);
-        //    single.Add(0x00);
-        //    single.Add(0x58);
-        //    single.Add(0x01);
-        //    single.Add(0x00);
-        //    single.Add(0xFF);
-        //    //报警
-        //    single.Add(0x55);
-        //    single.Add(0xAA);
-        //    single.Add(0x05);
-        //    single.Add(0x03);
-        //    single.Add(0x00);
-        //    single.Add(0x57);
-        //    single.Add(0x04);
-        //    single.Add(0xFF);
-        //    single.Add(0xFF);
-        //    single.Add(0xFF);
-        //    single.Add(0xFF);
-        //    single.Add(0xEE);
-        //    return single;
-        //}
-
+       
         /// <summary>
         /// 一个泵的报警
         /// </summary>
