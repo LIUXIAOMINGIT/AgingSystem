@@ -75,7 +75,6 @@ namespace WifiSimulator
         {
             List<byte> charBuffer = new List<byte>();
             charBuffer.Add(0x02);
-            //charBuffer[length-1] = 0x03;
             byte byteHigh = 0x00;
             byte byteLow = 0x00;
             for (int iLoop = 0; iLoop < buffer.Length; iLoop++)
