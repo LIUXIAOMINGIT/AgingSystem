@@ -1004,7 +1004,6 @@ namespace WifiSimulator
 
         private void btnF6LowVolC6Single_Click(object sender, EventArgs e)
         {
-            //m_ProductID = 66;
             m_SendFlag = 2;
             this.m_Pump.SendFlag = m_SendFlag;
             StartTimer();
@@ -1012,7 +1011,6 @@ namespace WifiSimulator
 
         private void btnF6DelepeC6Single_Click(object sender, EventArgs e)
         {
-            //m_ProductID = 66;
             m_SendFlag = 3;
             this.m_Pump.SendFlag = m_SendFlag;
             StartTimer();
