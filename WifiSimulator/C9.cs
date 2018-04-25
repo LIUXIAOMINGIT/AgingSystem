@@ -9,7 +9,6 @@ namespace WifiSimulator
 {
     public class C9 : Graseby
     {
-
         public C9(AsyncClient client)
             : base(client)
         {
