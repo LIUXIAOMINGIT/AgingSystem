@@ -906,8 +906,19 @@ namespace  AgingSystem
                             rate *= 10;
                         }
 
-                        if (currentObj.SocketToken!=null)
-                            m_CmdManager.SendCmdCharge(rate, volume, currentObj.SocketToken, CommandResponse, CommandTimeoutResponse, channel);
+                        if (currentObj.SocketToken != null)
+                        {
+                            if (m_CurrentProductID == ProductID.GrasebyC9)
+                            {
+                                C9OcclusionLevel level = para.C9OclusionLevel;
+                                m_CmdManager.SendCmdCharge(rate, volume, level, currentObj.SocketToken, CommandResponse, CommandTimeoutResponse, channel);
+                            }
+                            else
+                            {
+                                //OcclusionLevel level = para.OclusionLevel;
+                                m_CmdManager.SendCmdCharge(rate, volume, currentObj.SocketToken, CommandResponse, CommandTimeoutResponse, channel);
+                            }
+                        }
                         else
                         {
                             Logger.Instance().ErrorFormat("ProcStartAging()->发送老化充电命令时，{0}号货架第{1}层控制器SocketToken为null", currentObj.DockNo, currentObj.RowNo);

@@ -405,6 +405,7 @@ namespace Cmd
         H = 0x02,
         N = 0x03,
     }
+
     public enum C9OcclusionLevel : byte
     {
         Level1 = 0x00,
@@ -413,8 +414,6 @@ namespace Cmd
         Level4 = 0x03,
         Level5 = 0x04,
     }
-
-    
 
     public enum EAgingStatus
     {
