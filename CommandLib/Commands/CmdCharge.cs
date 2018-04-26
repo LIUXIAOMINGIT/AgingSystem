@@ -10,11 +10,11 @@ namespace Cmd
     /// </summary>
     public class CmdCharge : BaseCommand
     {
-        private byte[] m_Rate = new byte[3] { 0, 0, 0 };     //低中高对应的索引为0,1,2
-        private ScaleValue m_RateScale = ScaleValue.None;
-        private byte[] m_Volume = new byte[3] { 0, 0, 0 };     //低中高对应的索引为0,1,2
-        private ScaleValue m_VolumeScale = ScaleValue.None;
-        private OcclusionLevel m_OcclusionLevel = OcclusionLevel.H;
+        protected byte[]         m_Rate           = new byte[3] { 0, 0, 0 };     //低中高对应的索引为0,1,2
+        protected ScaleValue     m_RateScale      = ScaleValue.None;
+        protected byte[]         m_Volume         = new byte[3] { 0, 0, 0 };     //低中高对应的索引为0,1,2
+        protected ScaleValue     m_VolumeScale    = ScaleValue.None;
+        protected OcclusionLevel m_OcclusionLevel = OcclusionLevel.H;
         /// <summary>
         /// 对于ASAD来说，只有回应一条命令。
         /// </summary>
@@ -24,10 +24,10 @@ namespace Cmd
 
         public void SetRate(decimal rate)
         {
-            decimal intPart = decimal.Truncate(rate);
-            int intRate = decimal.ToInt32(intPart); //速率的整数部分
-            decimal decimalRate = rate - intRate;   //速率的小数部分
-            int decimalRateLength = decimalRate.ToString().Length-2;
+            decimal intPart       = decimal.Truncate(rate);
+            int intRate           = decimal.ToInt32(intPart); //速率的整数部分
+            decimal decimalRate   = rate - intRate;   //速率的小数部分
+            int decimalRateLength = decimalRate.ToString().Length - 2;
 
             switch (decimalRateLength)
             {
@@ -59,15 +59,15 @@ namespace Cmd
                     break;
             }
             m_Rate[0] = (byte)(intRate & 0x000000FF);
-            m_Rate[1] = (byte)(intRate>>8 & 0x000000FF);
-            m_Rate[2] = (byte)(intRate>>16 & 0x000000FF);
+            m_Rate[1] = (byte)(intRate >> 8 & 0x000000FF);
+            m_Rate[2] = (byte)(intRate >> 16 & 0x000000FF);
         }
 
         public void SetVolume(decimal vol)
         {
-            decimal intPart = decimal.Truncate(vol);
-            int intvol = decimal.ToInt32(intPart); //速率的整数部分
-            decimal decimalvol = vol - intvol;     //速率的小数部分
+            decimal intPart      = decimal.Truncate(vol);
+            int intvol           = decimal.ToInt32(intPart); //速率的整数部分
+            decimal decimalvol   = vol - intvol;     //速率的小数部分
             int decimalvolLength = decimalvol.ToString().Length - 2;
 
             switch (decimalvolLength)
@@ -137,7 +137,7 @@ namespace Cmd
         }
 
 
-          public  List<byte> GetBytesDebug()
+        public List<byte> GetBytesDebug()
         {
             //先计算Payload长度
             UpdatePayloadLength(0);
@@ -171,7 +171,7 @@ namespace Cmd
 
         public override void SetBytes(byte[] payloadData)
         {
-             
+
         }
 
         /// <summary>
@@ -194,5 +194,47 @@ namespace Cmd
         {
             base.InvokeTimeOut();
         }
+    }
+
+    public class CmdChargeC9 :CmdCharge
+    {
+        protected C9OcclusionLevel m_C9OcclusionLevel = C9OcclusionLevel.Level3;
+
+        public CmdChargeC9()
+            : base()
+        { }
+
+        /// <summary>
+        /// 设置C9压力
+        /// </summary>
+        /// <param name="level"></param>
+        public void SetOcclusionLevel(C9OcclusionLevel level)
+        {
+            m_C9OcclusionLevel = level;
+        }
+
+        /// <summary>
+        /// 将要发送的命令变成字节数组
+        /// </summary>
+        /// <returns></returns>
+        public override List<byte> GetBytes()
+        {
+            //先计算Payload长度
+            UpdatePayloadLength(9);
+            //命令头部（payload length（含）之前）
+            List<byte> basebuffer = base.GetBytes();
+            basebuffer.AddRange(m_Rate);
+            basebuffer.Add((byte)m_RateScale);
+            basebuffer.AddRange(m_Volume);
+            basebuffer.Add((byte)m_VolumeScale);
+            basebuffer.Add((byte)m_C9OcclusionLevel);
+            //取checksum字节
+            uint checksum = CRC32.CalcCRC32Partial(basebuffer, basebuffer.Count, CRC32.CRC32_SEED);
+            checksum ^= CRC32.CRC32_SEED;
+            byte[] arrChecksum = StructConverter.StructureToByte<uint>(checksum);
+            basebuffer.AddRange(arrChecksum);
+            return basebuffer;
+        }
+
     }
 }

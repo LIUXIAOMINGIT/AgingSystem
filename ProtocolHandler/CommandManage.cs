@@ -75,6 +75,7 @@ namespace Analyse
         /// </summary>
         /// <param name="rate"></param>
         /// <param name="volume"></param>
+        /// <param name="level">压力等级，C9及其他泵都以字节表示</param>
         /// <param name="remoteSocket"></param>
         /// <param name="func"></param>
         /// <param name="timeoutFunc"></param>
@@ -85,6 +86,28 @@ namespace Analyse
             cmd.Channel = channel;
             cmd.SetRate(rate);
             cmd.SetVolume(volume);
+            cmd.RemoteSocket = remoteSocket;
+            long ip = ControllerManager.GetLongIPFromSocket(remoteSocket);
+            AddCommand(ip, cmd, func, timeoutFunc);
+        }
+
+        /// <summary>
+        /// C9专用充电命令
+        /// </summary>
+        /// <param name="rate"></param>
+        /// <param name="volume"></param>
+        /// <param name="level">C9压力</param>
+        /// <param name="remoteSocket"></param>
+        /// <param name="func"></param>
+        /// <param name="timeoutFunc"></param>
+        /// <param name="channel"></param>
+        public void SendCmdCharge(decimal rate, decimal volume, C9OcclusionLevel level, AsyncSocketUserToken remoteSocket, EventHandler<EventArgs> func, EventHandler<EventArgs> timeoutFunc, byte channel = 0xFF)
+        {
+            CmdChargeC9 cmd = new CmdChargeC9();
+            cmd.Channel = channel;
+            cmd.SetRate(rate);
+            cmd.SetVolume(volume);
+            cmd.SetOcclusionLevel(level);
             cmd.RemoteSocket = remoteSocket;
             long ip = ControllerManager.GetLongIPFromSocket(remoteSocket);
             AddCommand(ip, cmd, func, timeoutFunc);
