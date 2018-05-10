@@ -141,6 +141,136 @@ namespace PTool
                 }
                 #endregion
 
+                #region 读GrasebyC6T压力范围
+                group = config.GetSectionGroup("GrasebyC6T");
+                pid = PumpID.GrasebyC6T;
+                for (int iLoop = 0; iLoop < group.Sections.Count; iLoop++)
+                {
+                    string scetionName = "GrasebyC6T/" + group.Sections.GetKey(iLoop);
+                    string strLevel = group.Sections.GetKey(iLoop);
+                    Misc.OcclusionLevel level = Misc.OcclusionLevel.None;
+                    if (Enum.IsDefined(typeof(Misc.OcclusionLevel), strLevel))
+                    {
+                        level = (Misc.OcclusionLevel)Enum.Parse(typeof(Misc.OcclusionLevel), strLevel);
+                    }
+                    pressureCollection = (NameValueCollection)ConfigurationManager.GetSection(scetionName);
+                    string key = string.Empty;
+                    string pressureValue = string.Empty;
+                    int iCount = pressureCollection.Count;
+                    for (int k = 0; k < iCount; k++)
+                    {
+                        key = pressureCollection.GetKey(k);
+                        pressureValue = pressureCollection[k].ToString();
+                        string[] splitPressure = pressureValue.Split(',');
+                        PressureManager.Instance().Add(pid, level, int.Parse(key), float.Parse(splitPressure[0]), float.Parse(splitPressure[1]), float.Parse(splitPressure[2]));
+                    }
+                }
+                #endregion
+
+                #region 读Graseby2000压力范围
+                group = config.GetSectionGroup("Graseby2000");
+                pid = PumpID.Graseby2000;
+                for (int iLoop = 0; iLoop < group.Sections.Count; iLoop++)
+                {
+                    string scetionName = "Graseby2000/" + group.Sections.GetKey(iLoop);
+                    string strLevel = group.Sections.GetKey(iLoop);
+                    Misc.OcclusionLevel level = Misc.OcclusionLevel.None;
+                    if (Enum.IsDefined(typeof(Misc.OcclusionLevel), strLevel))
+                    {
+                        level = (Misc.OcclusionLevel)Enum.Parse(typeof(Misc.OcclusionLevel), strLevel);
+                    }
+                    pressureCollection = (NameValueCollection)ConfigurationManager.GetSection(scetionName);
+                    string key = string.Empty;
+                    string pressureValue = string.Empty;
+                    int iCount = pressureCollection.Count;
+                    for (int k = 0; k < iCount; k++)
+                    {
+                        key = pressureCollection.GetKey(k);
+                        pressureValue = pressureCollection[k].ToString();
+                        string[] splitPressure = pressureValue.Split(',');
+                        PressureManager.Instance().Add(pid, level, int.Parse(key), float.Parse(splitPressure[0]), float.Parse(splitPressure[1]), float.Parse(splitPressure[2]));
+                    }
+                }
+                #endregion
+
+                #region 读Graseby2100压力范围
+                group = config.GetSectionGroup("Graseby2100");
+                pid = PumpID.Graseby2100;
+                for (int iLoop = 0; iLoop < group.Sections.Count; iLoop++)
+                {
+                    string scetionName = "Graseby2100/" + group.Sections.GetKey(iLoop);
+                    string strLevel = group.Sections.GetKey(iLoop);
+                    Misc.OcclusionLevel level = Misc.OcclusionLevel.None;
+                    if (Enum.IsDefined(typeof(Misc.OcclusionLevel), strLevel))
+                    {
+                        level = (Misc.OcclusionLevel)Enum.Parse(typeof(Misc.OcclusionLevel), strLevel);
+                    }
+                    pressureCollection = (NameValueCollection)ConfigurationManager.GetSection(scetionName);
+                    string key = string.Empty;
+                    string pressureValue = string.Empty;
+                    int iCount = pressureCollection.Count;
+                    for (int k = 0; k < iCount; k++)
+                    {
+                        key = pressureCollection.GetKey(k);
+                        pressureValue = pressureCollection[k].ToString();
+                        string[] splitPressure = pressureValue.Split(',');
+                        PressureManager.Instance().Add(pid, level, int.Parse(key), float.Parse(splitPressure[0]), float.Parse(splitPressure[1]), float.Parse(splitPressure[2]));
+                    }
+                }
+                #endregion
+
+                #region 读WZ50F6压力范围
+                group = config.GetSectionGroup("WZS50F6");
+                pid = PumpID.WZS50F6;
+                for (int iLoop = 0; iLoop < group.Sections.Count; iLoop++)
+                {
+                    string scetionName = "WZS50F6/" + group.Sections.GetKey(iLoop);
+                    string strLevel = group.Sections.GetKey(iLoop);
+                    Misc.OcclusionLevel level = Misc.OcclusionLevel.None;
+                    if (Enum.IsDefined(typeof(Misc.OcclusionLevel), strLevel))
+                    {
+                        level = (Misc.OcclusionLevel)Enum.Parse(typeof(Misc.OcclusionLevel), strLevel);
+                    }
+                    pressureCollection = (NameValueCollection)ConfigurationManager.GetSection(scetionName);
+                    string key = string.Empty;
+                    string pressureValue = string.Empty;
+                    int iCount = pressureCollection.Count;
+                    for (int k = 0; k < iCount; k++)
+                    {
+                        key = pressureCollection.GetKey(k);
+                        pressureValue = pressureCollection[k].ToString();
+                        string[] splitPressure = pressureValue.Split(',');
+                        PressureManager.Instance().Add(pid, level, int.Parse(key), float.Parse(splitPressure[0]), float.Parse(splitPressure[1]), float.Parse(splitPressure[2]));
+                    }
+                }
+                #endregion
+
+                #region 读WZ50C6T压力范围
+                group = config.GetSectionGroup("WZ50C6T");
+                pid = PumpID.WZ50C6T;
+                for (int iLoop = 0; iLoop < group.Sections.Count; iLoop++)
+                {
+                    string scetionName = "WZ50C6T/" + group.Sections.GetKey(iLoop);
+                    string strLevel = group.Sections.GetKey(iLoop);
+                    Misc.OcclusionLevel level = Misc.OcclusionLevel.None;
+                    if (Enum.IsDefined(typeof(Misc.OcclusionLevel), strLevel))
+                    {
+                        level = (Misc.OcclusionLevel)Enum.Parse(typeof(Misc.OcclusionLevel), strLevel);
+                    }
+                    pressureCollection = (NameValueCollection)ConfigurationManager.GetSection(scetionName);
+                    string key = string.Empty;
+                    string pressureValue = string.Empty;
+                    int iCount = pressureCollection.Count;
+                    for (int k = 0; k < iCount; k++)
+                    {
+                        key = pressureCollection.GetKey(k);
+                        pressureValue = pressureCollection[k].ToString();
+                        string[] splitPressure = pressureValue.Split(',');
+                        PressureManager.Instance().Add(pid, level, int.Parse(key), float.Parse(splitPressure[0]), float.Parse(splitPressure[1]), float.Parse(splitPressure[2]));
+                    }
+                }
+                #endregion
+
             }
             catch (Exception ex)
             {

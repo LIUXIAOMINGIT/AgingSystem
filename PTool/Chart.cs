@@ -223,7 +223,6 @@ namespace PTool
             SetPValue(args.SensorValue);
         }
 
-
         private void OnPTool_DeviceDataRecerived(object sender, EventArgs e)
         {
             PToolingDataEventArgs args = e as PToolingDataEventArgs;
@@ -330,7 +329,6 @@ namespace PTool
             EnableContols(true);
         }
 
-
         /// <summary>
         /// 
         /// </summary>
@@ -359,7 +357,6 @@ namespace PTool
             x1 = (xEndPoint.X - xOriginalPoint.X) / xSectionCount * m_Ch1SampleDataList[i].m_Weight + xOriginalPoint.X;
             m_gh.DrawLine(m_WaveLinePen, new PointF(x0, y0), new PointF(x1, y1));
         }
-
 
         private void WavelinePanel_Paint(object sender, PaintEventArgs e)
         {
@@ -571,6 +568,7 @@ namespace PTool
             m_GrasebyDevice.Open();
             m_GrasebyDevice.Get();
         }
+
         #region 单通道命令响应
 
         /// <summary>
@@ -1422,6 +1420,7 @@ namespace PTool
                 case PumpID.WZ50C6:
                     pid = Misc.ProductID.GrasebyC6;
                     break;
+                case PumpID.GrasebyC6T:
                 case PumpID.WZ50C6T:
                     pid = Misc.ProductID.GrasebyC6T;
                     break;

@@ -35,7 +35,6 @@ namespace PTool
         /// <param name="name">此语言下的品牌名称</param>
         public void Add(PumpID pid, OcclusionLevel level, int syringeSize, float min, float mid, float max)
         {
-          
             if (!m_HashProductPressure.ContainsKey(pid))
             {
                 LevelPressure lp = new LevelPressure(level);
@@ -126,7 +125,6 @@ namespace PTool
                 return 0;
             return sp.m_Mid;
         }
-
     }
 
     public class ProductPressure
