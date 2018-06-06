@@ -39,6 +39,7 @@ namespace PTool
         private void PressureForm_Load(object sender, EventArgs e)
         {
             InitPumpType();
+            LoadSettings();
             LoadConfig();
         }
 
@@ -84,7 +85,7 @@ namespace PTool
                         key = pressureCollection.GetKey(k);
                         pressureValue = pressureCollection[k].ToString();
                         string[] splitPressure = pressureValue.Split(',');
-                        PressureManager.Instance().Add(pid, level, int.Parse(key), float.Parse(splitPressure[0]), float.Parse(splitPressure[1]), float.Parse(splitPressure[2]));
+                        //PressureManager.Instance().Add(pid, level, int.Parse(key), float.Parse(splitPressure[0]), float.Parse(splitPressure[1]), float.Parse(splitPressure[2]));
                     }
                 }
                 #endregion
@@ -110,7 +111,7 @@ namespace PTool
                         key = pressureCollection.GetKey(k);
                         pressureValue = pressureCollection[k].ToString();
                         string[] splitPressure = pressureValue.Split(',');
-                        PressureManager.Instance().Add(pid, level, int.Parse(key), float.Parse(splitPressure[0]), float.Parse(splitPressure[1]), float.Parse(splitPressure[2]));
+                        //PressureManager.Instance().Add(pid, level, int.Parse(key), float.Parse(splitPressure[0]), float.Parse(splitPressure[1]), float.Parse(splitPressure[2]));
                     }
                 }
                 #endregion
@@ -136,7 +137,7 @@ namespace PTool
                         key = pressureCollection.GetKey(k);
                         pressureValue = pressureCollection[k].ToString();
                         string[] splitPressure = pressureValue.Split(',');
-                        PressureManager.Instance().Add(pid, level, int.Parse(key), float.Parse(splitPressure[0]), float.Parse(splitPressure[1]), float.Parse(splitPressure[2]));
+                        //PressureManager.Instance().Add(pid, level, int.Parse(key), float.Parse(splitPressure[0]), float.Parse(splitPressure[1]), float.Parse(splitPressure[2]));
                     }
                 }
                 #endregion
@@ -162,7 +163,7 @@ namespace PTool
                         key = pressureCollection.GetKey(k);
                         pressureValue = pressureCollection[k].ToString();
                         string[] splitPressure = pressureValue.Split(',');
-                        PressureManager.Instance().Add(pid, level, int.Parse(key), float.Parse(splitPressure[0]), float.Parse(splitPressure[1]), float.Parse(splitPressure[2]));
+                        //PressureManager.Instance().Add(pid, level, int.Parse(key), float.Parse(splitPressure[0]), float.Parse(splitPressure[1]), float.Parse(splitPressure[2]));
                     }
                 }
                 #endregion
@@ -188,7 +189,7 @@ namespace PTool
                         key = pressureCollection.GetKey(k);
                         pressureValue = pressureCollection[k].ToString();
                         string[] splitPressure = pressureValue.Split(',');
-                        PressureManager.Instance().Add(pid, level, int.Parse(key), float.Parse(splitPressure[0]), float.Parse(splitPressure[1]), float.Parse(splitPressure[2]));
+                        //PressureManager.Instance().Add(pid, level, int.Parse(key), float.Parse(splitPressure[0]), float.Parse(splitPressure[1]), float.Parse(splitPressure[2]));
                     }
                 }
                 #endregion
@@ -214,7 +215,7 @@ namespace PTool
                         key = pressureCollection.GetKey(k);
                         pressureValue = pressureCollection[k].ToString();
                         string[] splitPressure = pressureValue.Split(',');
-                        PressureManager.Instance().Add(pid, level, int.Parse(key), float.Parse(splitPressure[0]), float.Parse(splitPressure[1]), float.Parse(splitPressure[2]));
+                        //PressureManager.Instance().Add(pid, level, int.Parse(key), float.Parse(splitPressure[0]), float.Parse(splitPressure[1]), float.Parse(splitPressure[2]));
                     }
                 }
                 #endregion
@@ -240,7 +241,7 @@ namespace PTool
                         key = pressureCollection.GetKey(k);
                         pressureValue = pressureCollection[k].ToString();
                         string[] splitPressure = pressureValue.Split(',');
-                        PressureManager.Instance().Add(pid, level, int.Parse(key), float.Parse(splitPressure[0]), float.Parse(splitPressure[1]), float.Parse(splitPressure[2]));
+                        //PressureManager.Instance().Add(pid, level, int.Parse(key), float.Parse(splitPressure[0]), float.Parse(splitPressure[1]), float.Parse(splitPressure[2]));
                     }
                 }
                 #endregion
@@ -266,7 +267,7 @@ namespace PTool
                         key = pressureCollection.GetKey(k);
                         pressureValue = pressureCollection[k].ToString();
                         string[] splitPressure = pressureValue.Split(',');
-                        PressureManager.Instance().Add(pid, level, int.Parse(key), float.Parse(splitPressure[0]), float.Parse(splitPressure[1]), float.Parse(splitPressure[2]));
+                        //PressureManager.Instance().Add(pid, level, int.Parse(key), float.Parse(splitPressure[0]), float.Parse(splitPressure[1]), float.Parse(splitPressure[2]));
                     }
                 }
                 #endregion
@@ -276,6 +277,37 @@ namespace PTool
             {
                 MessageBox.Show("PTool.config文件参数配置错误，请先检查该文件后再重新启动程序!" + ex.Message);
             }
+        }
+
+        private void LoadSettings()
+        {
+            #region 读GrasebyC6压力范围
+
+            //string currentPath = Assembly.GetExecutingAssembly().Location;
+            //currentPath = currentPath.Substring(0, currentPath.LastIndexOf('\\'));  //删除文件名
+            //string iniPath = currentPath + "\\ptool.ini";
+            //IniReader reader = new IniReader(iniPath);
+
+            //const string GRASEBYC6   = "GrasebyC6";
+            //const string GRASEBYC6T  = "GrasebyC6T";
+            //const string WZ50C6T     = "WZ50C6T";
+            //const string GRASEBY2000 = "Graseby2000";
+            //const string GRASEBY2100 = "Graseby2100";
+            //const string WZ50C6      = "WZ50C6";
+            //const string GRASEBYF6_1 = "GrasebyF6_1";
+            //const string GRASEBYF6_2 = "GrasebyF6_2";
+            //const string WZS50F6_1   = "WZS50F6_1";
+            //const string WZS50F6_2   = "WZS50F6_2";
+
+
+            //reader.GetString("GRASEBYC6", "L")
+
+
+
+
+
+            #endregion
+
         }
 
         private void SaveLastToolingNo()

@@ -33,12 +33,12 @@ namespace PTool
         /// <param name="lang">语言</param>
         /// <param name="brand">品牌</param>
         /// <param name="name">此语言下的品牌名称</param>
-        public void Add(PumpID pid, OcclusionLevel level, int syringeSize, float min, float mid, float max)
+        public void Add(PumpID pid, OcclusionLevel level, int syringeSize,float mid)
         {
             if (!m_HashProductPressure.ContainsKey(pid))
             {
                 LevelPressure lp = new LevelPressure(level);
-                lp.Add(syringeSize, min, mid, max);
+                lp.Add(syringeSize, mid);
                 ProductPressure pp = new ProductPressure(pid);
                 pp.Add(lp);
                 m_HashProductPressure.Add(pid, pp);
@@ -49,12 +49,12 @@ namespace PTool
                 LevelPressure lp = pp.Find(level);
                 if (lp!=null)
                 {
-                    lp.Add(syringeSize, min, mid, max);
+                    lp.Add(syringeSize, mid);
                 }
                 else
                 {
                     lp = new LevelPressure(level);
-                    lp.Add(syringeSize, min, mid, max);
+                    lp.Add(syringeSize, mid);
                     pp.Add(lp);
                 }
             }
@@ -102,7 +102,7 @@ namespace PTool
             SizePressure sp  = lp.Find(size);
             if (sp == null)
                 return 0;
-            return sp.m_Max;
+            return sp.m_Mid;
         }
 
         /// <summary>
@@ -172,12 +172,12 @@ namespace PTool
             m_Level = level;
         }
 
-        public void Add(int syringeSize, float min, float mid, float max)
+        public void Add(int syringeSize, float mid)
         {
             if (m_SizePressureList == null)
                 m_SizePressureList = new List<SizePressure>();
             if (m_SizePressureList.FindIndex((x) => { return x.m_SyringeSize == syringeSize; }) < 0)
-                m_SizePressureList.Add(new SizePressure(syringeSize, min, mid, max));
+                m_SizePressureList.Add(new SizePressure(syringeSize, mid));
         }
 
         public SizePressure Find(int syringeSize)
@@ -190,18 +190,18 @@ namespace PTool
     public class SizePressure
     {
         public int   m_SyringeSize; //注射器尺寸
-        public float m_Min;         //压力最小值kg
+        //public float m_Min;         //压力最小值kg
         public float m_Mid;         //压力调试值kg
-        public float m_Max;         //压力最大值kg
+        //public float m_Max;         //压力最大值kg
 
         public SizePressure() { }
 
-        public SizePressure(int syringeSize, float min, float mid, float max)
+        public SizePressure(int syringeSize, float mid)
         {
             m_SyringeSize = syringeSize;
-            m_Min = min;
+            //m_Min = min;
             m_Mid = mid;
-            m_Max = max;        
+            //m_Max = max;        
         }
 
     }

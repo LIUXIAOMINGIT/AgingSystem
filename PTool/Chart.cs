@@ -23,39 +23,39 @@ namespace PTool
 {
     public partial class Chart : UserControl
     {
-        private readonly int BAUDRATE = 9600;
-        private const string VOL = "P值";
-        private const int LEFTBORDEROFFSET = 30;
-        private const int RIGHTBORDEROFFSET = 10;
-        private const int BOTTOMBORDEROFFSET = 30;     //X坐标与下边距，一般是绘图区域的一半高度
-        private const int TOPBOTTOMFFSET = 5;      //坐标上下边距
-        private const int CIRCLEDIAMETER = 5;      //曲线图上的圆点直径0
-        private const int TRYCOUNTSAMPLINGTIMEOUT = 5;      //采样超时次数为5.超时5次就停止 
-        private Graphics m_gh = null;
+        private readonly int BAUDRATE                          = 9600;
+        private const string VOL                               = "P值";
+        private const int LEFTBORDEROFFSET                     = 30;
+        private const int RIGHTBORDEROFFSET                    = 10;
+        private const int BOTTOMBORDEROFFSET                   = 30;     //X坐标与下边距，一般是绘图区域的一半高度
+        private const int TOPBOTTOMFFSET                       = 5;      //坐标上下边距
+        private const int CIRCLEDIAMETER                       = 5;      //曲线图上的圆点直径0
+        private const int TRYCOUNTSAMPLINGTIMEOUT              = 5;      //采样超时次数为5.超时5次就停止 
+        private Graphics                 m_gh                  = null;
         private System.Drawing.Rectangle m_Rect;
-        private Pen m_WaveLinePen = new Pen(Color.FromArgb(19, 113, 185));
-        private SolidBrush m_WaveLineBrush = new SolidBrush(Color.FromArgb(19, 113, 185));
-        private float m_XCoordinateMaxValue = 10;
-        private int m_YCoordinateMaxValue = 5;
-        private int m_XSectionCount = 10;
-        private int m_YSectionCount = 5;
-        private float m_CoordinateIntervalX = 0;  //X轴上的区间实际长度，单位为像素
-        private float m_CoordinateIntervalY = 0;  //Y轴上的区间实际长度，单位为像素
-        private float m_ValueInervalX = 0;  //X轴上的坐标值，根据实际放大倍数和量程决定
-        private float m_ValueInervalY = 0;
-        private List<SampleData> m_Ch1SampleDataList = new List<SampleData>();
+        private Pen                      m_WaveLinePen         = new Pen(Color.FromArgb(19, 113, 185));
+        private SolidBrush               m_WaveLineBrush       = new SolidBrush(Color.FromArgb(19, 113, 185));
+        private float                    m_XCoordinateMaxValue = 10;
+        private int                      m_YCoordinateMaxValue = 5;
+        private int                      m_XSectionCount       = 10;
+        private int                      m_YSectionCount       = 5;
+        private float                    m_CoordinateIntervalX = 0;  //X轴上的区间实际长度，单位为像素
+        private float                    m_CoordinateIntervalY = 0;  //Y轴上的区间实际长度，单位为像素
+        private float                    m_ValueInervalX       = 0;  //X轴上的坐标值，根据实际放大倍数和量程决定
+        private float                    m_ValueInervalY       = 0;
+        private List<SampleData>         m_Ch1SampleDataList   = new List<SampleData>();
 
-        protected GlobalResponse m_ConnResponse = null;
-        private PTooling m_PTool = null;
-        private PTooling m_DetectPTool = null;
-        private Graseby9600 m_GrasebyDevice = new Graseby9600();//只用于串口刷新
-        private PumpID m_LocalPid = PumpID.GrasebyC6;//默认显示的是C6
-        private System.Timers.Timer m_Ch1Timer = new System.Timers.Timer();
-        private int m_SampleInterval = 500;//采样频率：毫秒
+        protected GlobalResponse         m_ConnResponse        = null;
+        private PTooling                 m_PTool               = null;
+        private PTooling                 m_DetectPTool         = null;
+        private Graseby9600              m_GrasebyDevice       = new Graseby9600();//只用于串口刷新
+        private PumpID                   m_LocalPid            = PumpID.GrasebyC6;//默认显示的是C6
+        private System.Timers.Timer      m_Ch1Timer            = new System.Timers.Timer();
+        private int                      m_SampleInterval      = 500;//采样频率：毫秒
 
-        private int m_Channel = 1;//1号通道，默认值
-        private string m_PumpNo = string.Empty;//产品序号
-        private string m_ToolingNo = string.Empty;//工装编号
+        private int                      m_Channel             = 1;//1号通道，默认值
+        private string                   m_PumpNo              = string.Empty;//产品序号
+        private string                   m_ToolingNo           = string.Empty;//工装编号
 
         public delegate void DelegateSetWeightValue(float weight, bool isDetect);
         public delegate void DelegateSetPValue(float p);

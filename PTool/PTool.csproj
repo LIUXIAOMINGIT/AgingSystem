@@ -84,6 +84,7 @@
       <DependentUpon>Detail.cs</DependentUpon>
     </Compile>
     <Compile Include="Enums.cs" />
+    <Compile Include="IniReader.cs" />
     <Compile Include="PressureForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -122,6 +123,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="ptool.ini" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SerialDevice\SerialDevice.csproj">
@@ -174,7 +176,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>xcopy /y $(SolutionDir)lib\*  $(TargetDir)</PreBuildEvent>
+    <PreBuildEvent>xcopy /y $(SolutionDir)lib\*  $(TargetDir)
+xcopy /y $(ProjectDir)ptool.ini  $(TargetDir)</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
