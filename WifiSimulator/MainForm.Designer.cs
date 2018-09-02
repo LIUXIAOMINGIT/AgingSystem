@@ -94,12 +94,12 @@
             this.btnF8NoAlarmC8Single = new System.Windows.Forms.Button();
             this.btnF8DelepeC8Single = new System.Windows.Forms.Button();
             this.tabC9 = new System.Windows.Forms.TabPage();
-            this.btnC9ResponsePumpType = new System.Windows.Forms.Button();
-            this.btnC9StopAll = new System.Windows.Forms.Button();
-            this.btnC9LowAlarmSingle = new System.Windows.Forms.Button();
             this.btnC9LowVolC8Single = new System.Windows.Forms.Button();
             this.btnC9NoAlarmC8Single = new System.Windows.Forms.Button();
             this.btnC9DelepeC8Single = new System.Windows.Forms.Button();
+            this.btnC9LowAlarmSingle = new System.Windows.Forms.Button();
+            this.btnC9StopAll = new System.Windows.Forms.Button();
+            this.btnC9ResponsePumpType = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.pnlCheckBoxs.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -809,36 +809,6 @@
             this.tabC9.Text = "C9";
             this.tabC9.UseVisualStyleBackColor = true;
             // 
-            // btnC9ResponsePumpType
-            // 
-            this.btnC9ResponsePumpType.Location = new System.Drawing.Point(479, 26);
-            this.btnC9ResponsePumpType.Name = "btnC9ResponsePumpType";
-            this.btnC9ResponsePumpType.Size = new System.Drawing.Size(75, 40);
-            this.btnC9ResponsePumpType.TabIndex = 17;
-            this.btnC9ResponsePumpType.Text = "全部启动";
-            this.btnC9ResponsePumpType.UseVisualStyleBackColor = true;
-            this.btnC9ResponsePumpType.Click += new System.EventHandler(this.btnC9ResponsePumpType_Click);
-            // 
-            // btnC9StopAll
-            // 
-            this.btnC9StopAll.Location = new System.Drawing.Point(479, 84);
-            this.btnC9StopAll.Name = "btnC9StopAll";
-            this.btnC9StopAll.Size = new System.Drawing.Size(75, 33);
-            this.btnC9StopAll.TabIndex = 18;
-            this.btnC9StopAll.Text = "全部停止";
-            this.btnC9StopAll.UseVisualStyleBackColor = true;
-            this.btnC9StopAll.Click += new System.EventHandler(this.btnC9StopAll_Click);
-            // 
-            // btnC9LowAlarmSingle
-            // 
-            this.btnC9LowAlarmSingle.Location = new System.Drawing.Point(331, 31);
-            this.btnC9LowAlarmSingle.Name = "btnC9LowAlarmSingle";
-            this.btnC9LowAlarmSingle.Size = new System.Drawing.Size(108, 47);
-            this.btnC9LowAlarmSingle.TabIndex = 19;
-            this.btnC9LowAlarmSingle.Text = "发送低字节报警";
-            this.btnC9LowAlarmSingle.UseVisualStyleBackColor = true;
-            this.btnC9LowAlarmSingle.Click += new System.EventHandler(this.btnC9LowAlarmSingle_Click);
-            // 
             // btnC9LowVolC8Single
             // 
             this.btnC9LowVolC8Single.Location = new System.Drawing.Point(331, 84);
@@ -868,6 +838,36 @@
             this.btnC9DelepeC8Single.Text = "C9耗尽电报警";
             this.btnC9DelepeC8Single.UseVisualStyleBackColor = true;
             this.btnC9DelepeC8Single.Click += new System.EventHandler(this.btnC9DelepeC8Single_Click);
+            // 
+            // btnC9LowAlarmSingle
+            // 
+            this.btnC9LowAlarmSingle.Location = new System.Drawing.Point(331, 31);
+            this.btnC9LowAlarmSingle.Name = "btnC9LowAlarmSingle";
+            this.btnC9LowAlarmSingle.Size = new System.Drawing.Size(108, 47);
+            this.btnC9LowAlarmSingle.TabIndex = 19;
+            this.btnC9LowAlarmSingle.Text = "发送低字节报警";
+            this.btnC9LowAlarmSingle.UseVisualStyleBackColor = true;
+            this.btnC9LowAlarmSingle.Click += new System.EventHandler(this.btnC9LowAlarmSingle_Click);
+            // 
+            // btnC9StopAll
+            // 
+            this.btnC9StopAll.Location = new System.Drawing.Point(479, 84);
+            this.btnC9StopAll.Name = "btnC9StopAll";
+            this.btnC9StopAll.Size = new System.Drawing.Size(75, 33);
+            this.btnC9StopAll.TabIndex = 18;
+            this.btnC9StopAll.Text = "全部停止";
+            this.btnC9StopAll.UseVisualStyleBackColor = true;
+            this.btnC9StopAll.Click += new System.EventHandler(this.btnC9StopAll_Click);
+            // 
+            // btnC9ResponsePumpType
+            // 
+            this.btnC9ResponsePumpType.Location = new System.Drawing.Point(479, 26);
+            this.btnC9ResponsePumpType.Name = "btnC9ResponsePumpType";
+            this.btnC9ResponsePumpType.Size = new System.Drawing.Size(75, 40);
+            this.btnC9ResponsePumpType.TabIndex = 17;
+            this.btnC9ResponsePumpType.Text = "全部启动";
+            this.btnC9ResponsePumpType.UseVisualStyleBackColor = true;
+            this.btnC9ResponsePumpType.Click += new System.EventHandler(this.btnC9ResponsePumpType_Click);
             // 
             // MainForm
             // 

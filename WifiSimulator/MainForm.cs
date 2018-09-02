@@ -20,6 +20,8 @@ namespace WifiSimulator
         public delegate void DeleSendBytes();
         public delegate int DeleGetPumpCount(ref List<int> pumpIndexs);
 
+        private int                   m_TcpListenPort = 20160;
+
         private static uint counter                    = 1;
 
         private AsyncClient       m_Client             = null;
@@ -96,6 +98,10 @@ namespace WifiSimulator
         {
             cbPumpCount.SelectedIndex=0;
             System.Configuration.Configuration config = System.Configuration.ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            
+            if (!(int.TryParse(config.AppSettings.Settings["ServerPort"].Value, out m_TcpListenPort)))
+                m_TcpListenPort = 20160;
+
             if (!(int.TryParse(config.AppSettings.Settings["SendAlarmTimerInterval"].Value, out m_Send_Alarm_Timer_Interval)))
                 m_Send_Alarm_Timer_Interval = 60000;
             m_SendAlarmTimer.Interval = m_Send_Alarm_Timer_Interval;
@@ -699,7 +705,7 @@ namespace WifiSimulator
             if (m_Client != null && m_Client.IsConnected())
                 return;
             m_ReceivedBuffer.Clear();
-            m_Client =  new AsyncClient(tbLocalIP.Text, Convert.ToInt32(tbLocalport.Text), tbIPAddress.Text, 20160);
+            m_Client =  new AsyncClient(tbLocalIP.Text, Convert.ToInt32(tbLocalport.Text), tbIPAddress.Text, m_TcpListenPort);
             m_Client.HandleReceivedBuffers += OnReceivedBuffers;
             m_Client.Connect();
             SetClient();

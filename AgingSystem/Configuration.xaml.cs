@@ -185,6 +185,13 @@ namespace  AgingSystem
                 Logger.Instance().Info("机架数量小于等于0，请重新设置。");
                 return;
             }
+            //add 20180902 老化系统不稳定，采用一个机架一个应用窗口模式
+            if (m_DockCount == 1)
+            {
+                otherDockCheckBoxGrid.Visibility = Visibility.Collapsed;
+                Logger.Instance().Info("LoadDockList()机架数量等于1，不需要显示其他机架");
+                return;
+            }
             int rowCount = m_DockCount / 5;
             if (m_DockCount % 5 > 0)
                 rowCount += 1;
@@ -515,16 +522,25 @@ namespace  AgingSystem
                                                      recharge,
                                                      level,
                                                      c9Level);
-            for(int i=0;i<otherDockCheckBoxGrid.Children.Count;i++)
+
+
+            if (m_DockCount == 1)
             {
-                if(otherDockCheckBoxGrid.Children[i] is CheckBox)
+                dockParameter.Add(m_DockNo, new AgingParameter(para));
+            }
+            else
+            {
+                for (int i = 0; i < otherDockCheckBoxGrid.Children.Count; i++)
                 {
-                    CheckBox box = otherDockCheckBoxGrid.Children[i] as CheckBox;
-                    if(box.IsChecked.HasValue)
+                    if (otherDockCheckBoxGrid.Children[i] is CheckBox)
                     {
-                        if(box.IsChecked==true)
+                        CheckBox box = otherDockCheckBoxGrid.Children[i] as CheckBox;
+                        if (box.IsChecked.HasValue)
                         {
-                           dockParameter.Add((int)box.Tag, new AgingParameter(para));    //这里需要拷贝一份新的参数
+                            if (box.IsChecked == true)
+                            {
+                                dockParameter.Add((int)box.Tag, new AgingParameter(para));    //这里需要拷贝一份新的参数
+                            }
                         }
                     }
                 }

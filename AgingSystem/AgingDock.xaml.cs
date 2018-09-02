@@ -1894,7 +1894,16 @@ namespace  AgingSystem
             #region 创建文件夹
             string excelDir = "老化结果\\";
             string saveFileName = System.IO.Path.GetDirectoryName( System.Reflection.Assembly.GetAssembly(typeof(DockWindow)).Location);
-            string dirName = saveFileName + "\\" + excelDir + DateTime.Now.ToString("yyyy-MM-dd");
+
+            //用户自定义文件夹
+            string dirName = string.Empty;
+            if (string.IsNullOrEmpty(DockWindow.m_AgingResultDir) || !Directory.Exists(DockWindow.m_AgingResultDir))
+                dirName = saveFileName + "\\" + excelDir + DateTime.Now.ToString("yyyy-MM-dd");
+            else
+            {
+                dirName = DockWindow.m_AgingResultDir.Trim('\\') + "\\" + DateTime.Now.ToString("yyyy-MM-dd");
+            }
+
             string dockName = dirName + "\\" + this.m_DockNo.ToString() + "号货架";
             if(!Directory.Exists(dirName))
             {
@@ -1910,7 +1919,16 @@ namespace  AgingSystem
             //生成一份做备份
             string excelDirBackup = "老化结果备份\\";
             string saveFileNameBackup = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(DockWindow)).Location);
-            string dirNameBackup = saveFileNameBackup + "\\" + excelDirBackup + DateTime.Now.ToString("yyyy-MM-dd");
+
+            //用户自定义备份文件夹
+            string dirNameBackup = string.Empty;
+            if (string.IsNullOrEmpty(DockWindow.m_AgingResultDirBackup) || !Directory.Exists(DockWindow.m_AgingResultDirBackup))
+                dirNameBackup = saveFileNameBackup + "\\" + excelDirBackup + DateTime.Now.ToString("yyyy-MM-dd");
+            else
+            {
+                dirNameBackup = DockWindow.m_AgingResultDirBackup.Trim('\\') + "\\" + DateTime.Now.ToString("yyyy-MM-dd");
+            }
+
             string dockNameBackup = dirNameBackup + "\\" + this.m_DockNo.ToString() + "号货架";
             if (!Directory.Exists(dirNameBackup))
             {

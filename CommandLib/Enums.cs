@@ -299,7 +299,7 @@ namespace Cmd
             names.Add("Graseby1200英文");
             names.Add("GrasebyF6双道");
             names.Add("WZS50F6单道");
-            names.Add("GrasebyC9");
+            //names.Add("GrasebyC9");
             names.Add("WZS50F6双道");
             names.Add("GrasebyF8");
             return names;

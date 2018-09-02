@@ -30,19 +30,27 @@ namespace  AgingSystem
     {
         private delegate void SocketConnectOrCloseDelegate(SocketConnectArgs e);
         private delegate void OnUploadAlarmDelegate(BaseCommand e);
+        
+        private int             m_TcpListenPort                 = 20160;
+        private int             m_DockCount                     = 0;
+        public static int       m_QueryInterval                 = 0;
+        public static Hashtable m_DockParameter                 = new Hashtable();         //存放每个货架的配置信息（int 货架号，DefaultParameter）
+        public static Hashtable m_DockPumpList                  = new Hashtable();         //存放每个货架泵信息（int 货架号，List<Tuple<int,int,int,string>>分别是位置，行号，列号）
+        private List<AgingDock> m_DockList                      = new List<AgingDock>();   //泵架列表
+        private List<Color> ColorSet                            = new List<Color>();
+        private DispatcherTimer m_ShowCurrentTimer              = new DispatcherTimer();   //显示当前时间 
+        private int             m_TimeOut                       = 60000;                    //默认所有超时时间为60秒，包括命令响应时间
+        private int             m_HeartBeatTimeOut              = 240000;                   //默认所有超时时间为4分钟，心跳
+        public static int       m_CheckPumpStatusMaxMunites     = 30 * 60;                   //分，设置检查泵状态持续时间，超时将关闭线程
+        public static int       m_CheckPumpStopStatusMaxMunites = 300;              //分，设置检查泵停止状态持续时间，超时将关闭线程
+        public static int       m_CheckDisChargeMaxMunites      = 180;              //分，设置检查放电持续时间，超时将关闭线程
 
-        private int m_DockCount = 0;
-        public static int m_QueryInterval = 0;
-        public static Hashtable m_DockParameter = new Hashtable();         //存放每个货架的配置信息（int 货架号，DefaultParameter）
-        public static Hashtable m_DockPumpList = new Hashtable();         //存放每个货架泵信息（int 货架号，List<Tuple<int,int,int,string>>分别是位置，行号，列号）
-        private List<AgingDock> m_DockList = new List<AgingDock>();   //泵架列表
-        private List<Color> ColorSet = new List<Color>();
-        private DispatcherTimer m_ShowCurrentTimer = new DispatcherTimer();   //显示当前时间 
-        private int m_TimeOut = 60000;                    //默认所有超时时间为60秒，包括命令响应时间
-        private int m_HeartBeatTimeOut = 240000;                   //默认所有超时时间为4分钟，心跳
-        public static int m_CheckPumpStatusMaxMunites = 30 * 60;                   //分，设置检查泵状态持续时间，超时将关闭线程
-        public static int m_CheckPumpStopStatusMaxMunites = 300;              //分，设置检查泵停止状态持续时间，超时将关闭线程
-        public static int m_CheckDisChargeMaxMunites = 180;              //分，设置检查放电持续时间，超时将关闭线程
+        public int              m_DockNumber                    = 1;                //当架子只有一个时，这个变量才有效, add by 2018-09-01
+
+        
+        public static string m_AgingResultDir = string.Empty;  //自定义老化结果目录
+        public static string m_AgingResultDirBackup = string.Empty;  //自定义老化结果备份目录
+
 
         public DockWindow()
         {
@@ -110,6 +118,26 @@ namespace  AgingSystem
             Logger.Instance().Info("");
             Logger.Instance().Info("=====================应用程序启动===========================");
             System.Configuration.Configuration config = System.Configuration.ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+
+
+            if (config.AppSettings.Settings.AllKeys.Contains("DockNumber"))
+            {
+                //当架子只有一个时，这个变量才有效, add by 2018-09-01
+                if (!(int.TryParse(config.AppSettings.Settings["DockNumber"].Value, out m_DockNumber)))
+                    m_DockNumber = 1;
+            }
+            if (config.AppSettings.Settings.AllKeys.Contains("AgingResultDir"))
+            {
+                m_AgingResultDir = config.AppSettings.Settings["AgingResultDir"].Value;
+            }
+            if (config.AppSettings.Settings.AllKeys.Contains("AgingResultDirBackup"))
+            {
+                m_AgingResultDirBackup = config.AppSettings.Settings["AgingResultDirBackup"].Value;
+            }
+
+            if (!(int.TryParse(config.AppSettings.Settings["TcpListenPort"].Value, out m_TcpListenPort)))
+                m_TcpListenPort = 20160;
+            
             if (!(int.TryParse(config.AppSettings.Settings["DockCount"].Value, out m_DockCount)))
                 m_DockCount = 10;
             if (!(int.TryParse(config.AppSettings.Settings["QueryInterval"].Value, out m_QueryInterval)))
@@ -128,12 +156,19 @@ namespace  AgingSystem
             ControllerManager.Instance().Init();
             LoadDockList();
             ProtocolEngine.Instance().SetTimeOut(m_TimeOut);            //设置命令解析超时时间
+            AsyncServer.Instance().TcpServerPort = m_TcpListenPort;
             AsyncServer.Instance().SocketTimeOut = m_HeartBeatTimeOut;  //心跳超时时间
             ProtocolEngine.Instance().InitTcp();
             ProtocolEngine.Instance().SocketConnectOrCloseResponse += OnSocketConnectOrClose;
             ProtocolEngine.Instance().SendPumpType2Wifi += OnSendPumpType2Wifi;
             ProtocolEngine.Instance().UploadAlarm += OnUploadAlarm;
             ProtocolEngine.Instance().Start();
+
+            if (m_DockCount == 1)
+            {
+                this.Width = 270;
+                this.Height = 330;
+            }
         }
 
 
@@ -203,11 +238,24 @@ namespace  AgingSystem
                 dock.OnConfigrationCompleted += OnConfigrationCompleted;
                 dock.OnPumpSelected += OnPumpSelected;
                 dock.SetTimeOut(m_TimeOut);//设置信号量的等待时间,和命令超时时间一样
-                dock.Name = "dock" + (i + 1).ToString();
-                dock.Tag = i + 1;
-                dock.DockNo = i + 1;
-                dock.Margin = new Thickness(10, 10, 10, 10);
-                dock.SetTitle((i + 1).ToString() + "号架");
+
+                if (m_DockCount == 1)
+                {
+                    dock.Name = "dock" + m_DockNumber.ToString();
+                    dock.Tag = m_DockNumber;
+                    dock.DockNo = m_DockNumber;
+                    dock.Margin = new Thickness(10, 10, 10, 10);
+                    dock.SetTitle(m_DockNumber.ToString() + "号架");
+                }
+                else
+                {
+                    dock.Name = "dock" + (i + 1).ToString();
+                    dock.Tag = i + 1;
+                    dock.DockNo = i + 1;
+                    dock.Margin = new Thickness(10, 10, 10, 10);
+                    dock.SetTitle((i + 1).ToString() + "号架");
+                }
+
                 dockGrid.Children.Add(dock);
                 m_DockList.Add(dock);
                 Grid.SetRow(dock, i / 5);
