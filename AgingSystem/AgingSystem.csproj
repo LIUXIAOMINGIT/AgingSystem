@@ -91,6 +91,9 @@
     <Compile Include="Configuration.xaml.cs">
       <DependentUpon>Configuration.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Oprator.xaml.cs">
+      <DependentUpon>Oprator.xaml</DependentUpon>
+    </Compile>
     <Compile Include="RebootPumpManager.cs" />
     <Compile Include="DepletePumpManager.cs" />
     <Compile Include="DetailList.xaml.cs">
@@ -145,6 +148,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Oprator.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Parameter.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -7,7 +7,7 @@
             <ColumnDefinition Width="*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="20"></RowDefinition>
             <RowDefinition Height="2*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="25*"></RowDefinition>
@@ -26,6 +26,9 @@
                         <MenuItem Name="menuStartAll" Header="全部开始" Background="#FF3C5AAC" BorderThickness="0" BorderBrush="#FF3C5AAC" Padding="0" Click="OnStartAll"></MenuItem>
                         <MenuItem Name="menuStopAll" Header="全部停止" Background="#FF3C5AAC" BorderThickness="0" BorderBrush="#FF3C5AAC" Padding="0" Click="OnStopAll"></MenuItem>
                     </MenuItem>
+
+                    <MenuItem Name="menuOprator" Header="操作人编号" Click="OpratorClick"/>
+
                 </Menu>
             </Viewbox>
         </Grid>

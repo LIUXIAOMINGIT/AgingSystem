@@ -51,6 +51,8 @@ namespace  AgingSystem
         public static string m_AgingResultDir = string.Empty;  //自定义老化结果目录
         public static string m_AgingResultDirBackup = string.Empty;  //自定义老化结果备份目录
 
+        public static string m_OpratorNumber = string.Empty;  //操作员工编号
+
 
         public DockWindow()
         {
@@ -588,8 +590,12 @@ namespace  AgingSystem
             }
         }
 
-
-
-
+        #region 20180917 新增需求
+        private void OpratorClick(object sender, RoutedEventArgs e)
+        {
+            Oprator oprator = new Oprator();
+            oprator.ShowDialog();
+        }
+        #endregion
     }
 }

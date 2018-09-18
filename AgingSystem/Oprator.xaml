@@ -1,0 +1,27 @@
+﻿<Window x:Class="AgingSystem.Oprator"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AgingSystem"
+        mc:Ignorable="d"
+        Title="操作员编号" Height="115.236" Width="279.721" 
+        WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
+        Loaded="Window_Loaded">
+    
+    <Grid Name="configGrid" Margin="0" ShowGridLines="False" Background="#FFE4EFFC">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.6*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="1.2*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" Margin="3" Padding="2" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Center">编号</Label>
+        <TextBox Name="tbNumber"  Grid.Row="0" Grid.Column="1" Margin="2" Padding="1" FontSize="14" VerticalAlignment="Center" HorizontalAlignment="Stretch"  KeyDown="OnKeyDown"/>
+        <Button Name="btnSave" Grid.Row="0" Grid.Column="2" Padding="2" FontSize="14" IsEnabled="True" Cursor="Hand" Click="OnSave" VerticalAlignment="Center" HorizontalAlignment="Center" Background="#FFE4EFFC" IsDefault="True">保存并关闭</Button>
+    </Grid>
+</Window>

@@ -770,6 +770,11 @@ namespace  AgingSystem
         /// <param name="e"></param>
         public void OnStartClick(object sender, RoutedEventArgs e)
         {
+            if (DockWindow.m_OpratorNumber.Length != 8)
+            {
+                MessageBox.Show("操作员编号为空或格式不正确！");
+                return;
+            }
            StartAging();
         }
 
@@ -1980,6 +1985,7 @@ namespace  AgingSystem
             worksheet.Cells[1, ++index] = "老化结果";
             worksheet.Cells[1, ++index] = "报警";
             worksheet.Cells[1, ++index] = "有效数据";
+            worksheet.Cells[1, ++index] = "操作员";
             #endregion 
 
             int rowIndex = 2;
@@ -2085,7 +2091,7 @@ namespace  AgingSystem
                                         worksheet.Cells[rowIndex, ++index] = bPass && bPass2 && isBatteryOK == true ? "通过" : "失败";                                             //老化结果:电池不合格也不能通过
                                         worksheet.Cells[rowIndex, ++index] = pumpList[j].GetAlarmStringAndOcurredTime() + "\n" + strSecondPumpAlarm;                                                          //报警:带记录第一次发生时间
 
-                                        Excel.Range titleRange = worksheet.Range[worksheet.Cells[rowIndex, 1], worksheet.Cells[rowIndex, index]];                                 //选取一行   
+                                        Excel.Range titleRange = worksheet.Range[worksheet.Cells[rowIndex, 1], worksheet.Cells[rowIndex, 19]];                                 //选取一行   
                                         if (bPass && isBatteryOK)
                                             titleRange.Interior.ColorIndex = 35;//设置绿颜色
                                         else
@@ -2121,7 +2127,7 @@ namespace  AgingSystem
                                             }
                                         }
                                         worksheet.Cells[rowIndex, ++index] = pumpList[j].GetAlarmStringAndOcurredTime() + strSecondPumpAlarm;
-                                        Excel.Range titleRange = worksheet.Range[worksheet.Cells[rowIndex, 1], worksheet.Cells[rowIndex, index]];//选取一行   
+                                        Excel.Range titleRange = worksheet.Range[worksheet.Cells[rowIndex, 1], worksheet.Cells[rowIndex, 19]];//选取一行   
                                         titleRange.Interior.ColorIndex = 3;//设置红颜色
                                         #endregion
                                     }
@@ -2293,7 +2299,7 @@ namespace  AgingSystem
                                     #endregion
                                     worksheet.Cells[rowIndex, ++index] = bPass && isBatteryOK == true ? "通过" : "失败";                                                       //老化结果:电池不合格也不能通过
                                     worksheet.Cells[rowIndex, ++index] = pumpList[j].GetAlarmStringAndOcurredTime();                                                          //报警:带记录第一次发生时间
-                                    Excel.Range titleRange = worksheet.Range[worksheet.Cells[rowIndex, 1], worksheet.Cells[rowIndex, index]];//选取一行   
+                                    Excel.Range titleRange = worksheet.Range[worksheet.Cells[rowIndex, 1], worksheet.Cells[rowIndex, 19]];//选取一行   
                                     if (bPass && isBatteryOK)
                                         titleRange.Interior.ColorIndex = 35;//设置绿颜色
                                     else
@@ -2315,14 +2321,15 @@ namespace  AgingSystem
                                     worksheet.Cells[rowIndex, ++index] = "不合格";
                                     worksheet.Cells[rowIndex, ++index] = "失败";
                                     worksheet.Cells[rowIndex, ++index] = pumpList[j].GetAlarmStringAndOcurredTime();
-                                    Excel.Range titleRange = worksheet.Range[worksheet.Cells[rowIndex, 1], worksheet.Cells[rowIndex, index]];//选取一行   
+                                    Excel.Range titleRange = worksheet.Range[worksheet.Cells[rowIndex, 1], worksheet.Cells[rowIndex, 19]];//选取一行   
                                     titleRange.Interior.ColorIndex = 3;//设置红颜色
                                     #endregion
                                 }
 
                                 #endregion
                             }
-                            worksheet.Cells[rowIndex, 18] = isStopByManual==true?"0":"1";//机器编号
+                            worksheet.Cells[rowIndex, 18] = isStopByManual==true?"0":"1"; //是否是人工停止
+                            worksheet.Cells[rowIndex, 19] = DockWindow.m_OpratorNumber;   //操作员编号
                         }
                         if (m_CurrentCustomProductID == CustomProductID.GrasebyF8)
                         {
