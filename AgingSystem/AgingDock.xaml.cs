@@ -2093,7 +2093,7 @@ namespace  AgingSystem
                                         worksheet.Cells[rowIndex, ++index] = bPass && bPass2 && isBatteryOK == true ? "通过" : "失败";                                             //老化结果:电池不合格也不能通过
                                         worksheet.Cells[rowIndex, ++index] = pumpList[j].GetAlarmStringAndOcurredTime() + "\n" + strSecondPumpAlarm;                                                          //报警:带记录第一次发生时间
 
-                                        Excel.Range titleRange = worksheet.Range[worksheet.Cells[rowIndex, 1], worksheet.Cells[rowIndex, 19]];                                 //选取一行   
+                                        Excel.Range titleRange = worksheet.Range[worksheet.Cells[rowIndex, 1], worksheet.Cells[rowIndex, 20]];                                 //选取一行   
                                         if (bPass && isBatteryOK)
                                             titleRange.Interior.ColorIndex = 35;//设置绿颜色
                                         else
@@ -2130,7 +2130,7 @@ namespace  AgingSystem
                                             }
                                         }
                                         worksheet.Cells[rowIndex, ++index] = pumpList[j].GetAlarmStringAndOcurredTime() + strSecondPumpAlarm;
-                                        Excel.Range titleRange = worksheet.Range[worksheet.Cells[rowIndex, 1], worksheet.Cells[rowIndex, 19]];//选取一行   
+                                        Excel.Range titleRange = worksheet.Range[worksheet.Cells[rowIndex, 1], worksheet.Cells[rowIndex, 20]];//选取一行   
                                         titleRange.Interior.ColorIndex = 3;//设置红颜色
                                         #endregion
                                     }
@@ -2303,7 +2303,7 @@ namespace  AgingSystem
                                     #endregion
                                     worksheet.Cells[rowIndex, ++index] = bPass && isBatteryOK == true ? "通过" : "失败";                                                       //老化结果:电池不合格也不能通过
                                     worksheet.Cells[rowIndex, ++index] = pumpList[j].GetAlarmStringAndOcurredTime();                                                          //报警:带记录第一次发生时间
-                                    Excel.Range titleRange = worksheet.Range[worksheet.Cells[rowIndex, 1], worksheet.Cells[rowIndex, 19]];//选取一行   
+                                    Excel.Range titleRange = worksheet.Range[worksheet.Cells[rowIndex, 1], worksheet.Cells[rowIndex, 20]];//选取一行   
                                     if (bPass && isBatteryOK)
                                         titleRange.Interior.ColorIndex = 35;//设置绿颜色
                                     else
@@ -2326,15 +2326,18 @@ namespace  AgingSystem
                                     worksheet.Cells[rowIndex, ++index] = "不合格";
                                     worksheet.Cells[rowIndex, ++index] = "失败";
                                     worksheet.Cells[rowIndex, ++index] = pumpList[j].GetAlarmStringAndOcurredTime();
-                                    Excel.Range titleRange = worksheet.Range[worksheet.Cells[rowIndex, 1], worksheet.Cells[rowIndex, 19]];//选取一行   
+                                    Excel.Range titleRange = worksheet.Range[worksheet.Cells[rowIndex, 1], worksheet.Cells[rowIndex, 20]];//选取一行   
                                     titleRange.Interior.ColorIndex = 3;//设置红颜色
                                     #endregion
                                 }
 
                                 #endregion
                             }
-                            worksheet.Cells[rowIndex, 18] = isStopByManual==true?"0":"1"; //是否是人工停止
-                            worksheet.Cells[rowIndex, 19] = DockWindow.m_OpratorNumber;   //操作员编号
+                            worksheet.Cells[rowIndex, 19] = isStopByManual==true?"0":"1"; //是否是人工停止
+
+                            Excel.Range temp = worksheet.Range[worksheet.Cells[rowIndex, 20], worksheet.Cells[rowIndex, 20]];
+                            temp.NumberFormat = "@";  //设置单元格格式为文本类型，文本类型可设置上下标
+                            worksheet.Cells[rowIndex, 20] = DockWindow.m_OpratorNumber;   //操作员编号
                         }
                         if (m_CurrentCustomProductID == CustomProductID.GrasebyF8)
                         {
