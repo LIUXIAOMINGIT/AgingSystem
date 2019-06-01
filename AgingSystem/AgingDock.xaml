@@ -36,7 +36,7 @@
         <Label Name="lbStatus" Grid.Row="1" Grid.Column="0" Margin="3" Padding="5" FontSize="15">等待接入</Label>
         <!--泵型号-->
         <Label Name="lbPumpType" Grid.Row="2" Grid.Column="0" Margin="3" Padding="5" FontSize="15">泵型号:</Label>
-        <!--泵型号-->
+        <!--控制器数量-->
         <Label Name="lbWifiCount" Grid.Row="3" Grid.Column="0" Margin="3" Padding="5" FontSize="15">控制器数量:</Label>
         <!--泵数量-->
         <Label Name="lbPumpCount" Grid.Row="4" Grid.Column="0" Margin="3" Padding="5" FontSize="15">泵数量：</Label>

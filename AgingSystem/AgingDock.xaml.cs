@@ -1896,6 +1896,10 @@ namespace  AgingSystem
         /// <param name="isStopByManual">true:(人工停止，数据无效0); false:(自动老化结束,数据有效1)</param>
         public void ExportExcel(string fileName, bool isStopByManual = false)
         {
+            //文件名称加上泵类型
+            AgingParameter paraEx = m_DockParameter[m_DockNo] as AgingParameter;
+            fileName = paraEx.PumpType + "_" + fileName ;
+
             #region 创建文件夹
             string excelDir = "老化结果\\";
             string saveFileName = System.IO.Path.GetDirectoryName( System.Reflection.Assembly.GetAssembly(typeof(DockWindow)).Location);
@@ -2041,7 +2045,7 @@ namespace  AgingSystem
                                         worksheet.Cells[rowIndex, ++index] = pumpList[j].BeginDischargeTime.ToString("yyyy-MM-dd HH:mm:ss");                                     //放电开始
                                         worksheet.Cells[rowIndex, ++index] = pumpList[j].BeginLowVoltageTime.ToString("yyyy-MM-dd HH:mm:ss");                                    //低电压
                                         worksheet.Cells[rowIndex, ++index] = pumpList[j].BeginBattaryDepleteTime.ToString("yyyy-MM-dd HH:mm:ss");                                //电池耗尽
-                                        worksheet.Cells[rowIndex, ++index] = pumpList[j].EndAgingTime.ToString("yyyy-MM-dd HH:mm:ss");                                           //结束时间
+                                        worksheet.Cells[rowIndex, ++index] = pumpList[j].BeginBattaryDepleteTime.AddMinutes((int)(parameter.RechargeTime * 60)).ToString("yyyy-MM-dd HH:mm:ss");//结束时间
                                         worksheet.Cells[rowIndex, ++index] = (parameter.RechargeTime * 60).ToString("F1");                                                       //补电时长(min)=系统设置的补电时长
                                         worksheet.Cells[rowIndex, ++index] = (pumpList[j].BeginBattaryDepleteTime - pumpList[j].BeginAgingTime).TotalMinutes.ToString("F1");     //老化时长(min)=老化开始至电池耗尽的时长
                                         worksheet.Cells[rowIndex, ++index] = (pumpList[j].BeginBattaryDepleteTime - pumpList[j].BeginDischargeTime).TotalMinutes.ToString("F1"); //放电总时间(min)=放电开始至电池耗尽的时长
@@ -2107,7 +2111,7 @@ namespace  AgingSystem
                                         worksheet.Cells[rowIndex, ++index] = pumpList[j].BeginDischargeTime.Year > 2000 ? pumpList[j].BeginDischargeTime.ToString("yyyy-MM-dd HH:mm:ss") : "";
                                         worksheet.Cells[rowIndex, ++index] = pumpList[j].BeginLowVoltageTime.Year > 2000 ? pumpList[j].BeginLowVoltageTime.ToString("yyyy-MM-dd HH:mm:ss") : "";
                                         worksheet.Cells[rowIndex, ++index] = pumpList[j].BeginBattaryDepleteTime.Year > 2000 ? pumpList[j].BeginBattaryDepleteTime.ToString("yyyy-MM-dd HH:mm:ss") : "";
-                                        worksheet.Cells[rowIndex, ++index] = pumpList[j].EndAgingTime.Year > 2000 ? pumpList[j].EndAgingTime.ToString("yyyy-MM-dd HH:mm:ss") : "";//结束时间
+                                        worksheet.Cells[rowIndex, ++index] = pumpList[j].BeginBattaryDepleteTime.Year > 2000 ? pumpList[j].BeginBattaryDepleteTime.AddMinutes((int)(parameter.RechargeTime * 60)).ToString("yyyy-MM-dd HH:mm:ss") : "";//结束时间
                                         worksheet.Cells[rowIndex, ++index] = (parameter.RechargeTime * 60).ToString("F1");                                                       //补电时长(min)=系统设置的补电时长
                                         worksheet.Cells[rowIndex, ++index] = "";
                                         worksheet.Cells[rowIndex, ++index] = "";
@@ -2179,7 +2183,7 @@ namespace  AgingSystem
                                     worksheet.Cells[rowIndex, ++index] = pumpList[j].BeginDischargeTime.ToString("yyyy-MM-dd HH:mm:ss");                                     //放电开始
                                     worksheet.Cells[rowIndex, ++index] = pumpList[j].BeginLowVoltageTime.ToString("yyyy-MM-dd HH:mm:ss");                                    //低电压
                                     worksheet.Cells[rowIndex, ++index] = pumpList[j].BeginBattaryDepleteTime.ToString("yyyy-MM-dd HH:mm:ss");                                //电池耗尽
-                                    worksheet.Cells[rowIndex, ++index] = pumpList[j].EndAgingTime.ToString("yyyy-MM-dd HH:mm:ss");                                           //结束时间
+                                    worksheet.Cells[rowIndex, ++index] = pumpList[j].BeginBattaryDepleteTime.AddMinutes((int)(parameter.RechargeTime * 60)).ToString("yyyy-MM-dd HH:mm:ss");//结束时间
                                     worksheet.Cells[rowIndex, ++index] = (parameter.RechargeTime * 60).ToString("F1");                                                       //补电时长(min)=系统设置的补电时长
                                     worksheet.Cells[rowIndex, ++index] = (pumpList[j].BeginBattaryDepleteTime - pumpList[j].BeginAgingTime).TotalMinutes.ToString("F1");     //老化时长(min)=老化开始至电池耗尽的时长
                                     worksheet.Cells[rowIndex, ++index] = (pumpList[j].BeginBattaryDepleteTime - pumpList[j].BeginDischargeTime).TotalMinutes.ToString("F1"); //放电总时间(min)=放电开始至电池耗尽的时长
@@ -2317,7 +2321,7 @@ namespace  AgingSystem
                                     worksheet.Cells[rowIndex, ++index] = pumpList[j].BeginDischargeTime.Year > 2000 ? pumpList[j].BeginDischargeTime.ToString("yyyy-MM-dd HH:mm:ss") : "";
                                     worksheet.Cells[rowIndex, ++index] = pumpList[j].BeginLowVoltageTime.Year > 2000 ? pumpList[j].BeginLowVoltageTime.ToString("yyyy-MM-dd HH:mm:ss") : "";
                                     worksheet.Cells[rowIndex, ++index] = pumpList[j].BeginBattaryDepleteTime.Year > 2000 ? pumpList[j].BeginBattaryDepleteTime.ToString("yyyy-MM-dd HH:mm:ss") : "";
-                                    worksheet.Cells[rowIndex, ++index] = pumpList[j].EndAgingTime.Year > 2000 ? pumpList[j].EndAgingTime.ToString("yyyy-MM-dd HH:mm:ss") : "";//结束时间
+                                    worksheet.Cells[rowIndex, ++index] = pumpList[j].BeginBattaryDepleteTime.Year > 2000 ? pumpList[j].BeginBattaryDepleteTime.AddMinutes((int)(parameter.RechargeTime * 60)).ToString("yyyy-MM-dd HH:mm:ss") : "";//结束时间
                                     worksheet.Cells[rowIndex, ++index] = (parameter.RechargeTime * 60).ToString("F1");                                                       //补电时长(min)=系统设置的补电时长
                                     worksheet.Cells[rowIndex, ++index] = "";
                                     worksheet.Cells[rowIndex, ++index] = "";
