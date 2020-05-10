@@ -54,7 +54,7 @@
                 <ColumnDefinition Width="1.5*"></ColumnDefinition>
                 <ColumnDefinition Width="1.5*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="1.5*"></ColumnDefinition>
+                <ColumnDefinition Width="0"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"></RowDefinition>
@@ -64,7 +64,7 @@
             <Label Grid.Row="0" Grid.Column="1" Margin="3" Padding="5" FontSize="13" VerticalAlignment="Center" HorizontalAlignment="Center">泵型号</Label>
             <Label Grid.Row="0" Grid.Column="2" Margin="3" Padding="5" FontSize="13" VerticalAlignment="Center" HorizontalAlignment="Center">速率(mL/h)</Label>
             <Label Grid.Row="0" Grid.Column="3" Margin="3" Padding="5" FontSize="13" VerticalAlignment="Center" HorizontalAlignment="Center">限制量(mL)</Label>
-            <Label Grid.Row="0" Grid.Column="4" Margin="3" Padding="5" FontSize="13" VerticalAlignment="Center" HorizontalAlignment="Center">充电时长(h)</Label>
+            <Label Grid.Row="0" Grid.Column="4" Margin="3" Padding="5" FontSize="13" VerticalAlignment="Center" HorizontalAlignment="Center">老化时长(h)</Label>
             <Label Grid.Row="0" Grid.Column="5" Margin="3" Padding="5" FontSize="13" VerticalAlignment="Center" HorizontalAlignment="Center">压力档</Label>
             <Label Grid.Row="0" Grid.Column="6" Margin="3" Padding="5" FontSize="13" VerticalAlignment="Center" HorizontalAlignment="Center">补电时长(h)</Label>
 

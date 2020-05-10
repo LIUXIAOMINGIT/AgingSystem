@@ -217,9 +217,9 @@ namespace AsyncSocket
             {
                 RemoveCommandQueue(this, new DataTransmissionEventArgs(userToken));
             }
-            string socketInfo = string.Format("Local Address: {0} Remote Address: {1}", userToken.ConnectSocket.LocalEndPoint,
-                userToken.ConnectSocket.RemoteEndPoint);
-            Logger.Instance().InfoFormat("Client connection disconnected. {0}", socketInfo);
+            //string socketInfo = string.Format("Local Address: {0} Remote Address: {1}", userToken.ConnectSocket.LocalEndPoint,
+            //    userToken.ConnectSocket.RemoteEndPoint);
+            //Logger.Instance().InfoFormat("Client connection disconnected. {0}", socketInfo);
             try
             {
                 if(userToken.ConnectSocket!=null)
@@ -227,7 +227,7 @@ namespace AsyncSocket
             }
             catch (Exception e)
             {
-                Logger.Instance().ErrorFormat("CloseClientSocket()-> Disconnect client {0} error, message: {1}", socketInfo, e.Message);
+                //Logger.Instance().ErrorFormat("CloseClientSocket()-> Disconnect client {0} error, message: {1}", socketInfo, e.Message);
             }
             try
             {

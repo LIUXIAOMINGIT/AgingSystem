@@ -61,7 +61,7 @@ namespace  AgingSystem
             }
             try
             {
-                decimal[] outValue = new decimal[5];
+                decimal[] outValue = new decimal[3];
                 string factorString = string.Empty;
                 char[] separatorLine = new char[2] { (char)0x0D, (char)0x0A };
                 char[] separator = new char[2] { '\t', ' ' };
@@ -77,25 +77,23 @@ namespace  AgingSystem
                         string[] factor = s.Split(separator, StringSplitOptions.RemoveEmptyEntries);
                         OcclusionLevel level = OcclusionLevel.H;
                         C9OcclusionLevel c9Level = C9OcclusionLevel.Level3;
-                        if (factor.Length != 7)
+                        if (factor.Length != 5)
                             continue;
                         if (decimal.TryParse(factor[1],    out outValue[0])
                             && decimal.TryParse(factor[2], out outValue[1])
                             && decimal.TryParse(factor[3], out outValue[2])
-                            && decimal.TryParse(factor[4], out outValue[3])
-                            && decimal.TryParse(factor[5], out outValue[4])
                             )
                         {
-                            if(Enum.IsDefined(typeof(OcclusionLevel), factor[6]))
-                                level = (OcclusionLevel)Enum.Parse(typeof(OcclusionLevel), factor[6]);
-                            else if (Enum.IsDefined(typeof(C9OcclusionLevel), factor[6]))
+                            if(Enum.IsDefined(typeof(OcclusionLevel), factor[4]))
+                                level = (OcclusionLevel)Enum.Parse(typeof(OcclusionLevel), factor[4]);
+                            else if (Enum.IsDefined(typeof(C9OcclusionLevel), factor[4]))
                             {
-                                c9Level = (C9OcclusionLevel)Enum.Parse(typeof(C9OcclusionLevel), factor[6]);
+                                c9Level = (C9OcclusionLevel)Enum.Parse(typeof(C9OcclusionLevel), factor[4]);
                             }
                             else
                                 break;
                             //如果转换成功，就新建一个DefaultParameter对象
-                            ParameterManager.Instance().Add(new AgingParameter(factor[0], outValue[0], outValue[1], outValue[2], outValue[3], outValue[4], level, c9Level));
+                            ParameterManager.Instance().Add(new AgingParameter(factor[0], outValue[0], outValue[1], outValue[2], 0, 0, level, c9Level));
                             continue;
                         }
                         #endregion

@@ -424,7 +424,7 @@ namespace Cmd
             }
             #endregion
 
-            uint filterAlarm = m_Alarm & (~(depletealArmIndex | lowVolArmIndex | completeArmIndex | willCompleteArmIndex | forgetStartAlarmIndex));
+            uint filterAlarm = m_Alarm & (~(completeArmIndex | willCompleteArmIndex | forgetStartAlarmIndex));
             if (filterAlarm > 0)
                 return false;
             else

@@ -37,7 +37,7 @@
         <TextBox Name="tbVolume"    Grid.Row="0" Grid.Column="7" Margin="2" Padding="1" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Left" Width="100" KeyDown="tbVolume_KeyDown" TextChanged="tbVolume_TextChanged" />
         <Label Name="lbVolumeUnit"  Grid.Row="0" Grid.Column="8" Margin="2" Padding="1" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Left">mL</Label>
 
-        <!--充电时长-->
+        <!--档位-->
         <Label Name   ="lbOcclusionLevel"  Grid.Row="1" Grid.Column="0" Margin="3" Padding="2" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Left">压力档位</Label>
         <ComboBox Name="cmOcclusionLevel"  Grid.Row="1" Grid.Column="1" Margin="1,8,0,0" Padding="1" FontSize="12" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120" SelectionChanged="OnOcclusionChanged" Grid.ColumnSpan="2" >
             <!--<ComboBoxItem>L</ComboBoxItem>
@@ -50,14 +50,16 @@
         <!--放电时长-->
         <!--Label Name   ="lbDischarge"     Grid.Row="1" Grid.Column="3" Margin="3" Padding="2" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Left">放电时长</-->
         <!--TextBox Name ="tbDischarge"     Grid.Row="1" Grid.Column="4" Margin="3" Padding="2" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Left" Width="100" /-->
-        <Label Name   ="lbCharge"     Grid.Row="1" Grid.Column="3" Margin="3" Padding="2" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Left">充电时长</Label>
+
+        <!--老化时长-->
+        <Label Name   ="lbCharge"     Grid.Row="1" Grid.Column="3" Margin="3" Padding="2" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Left">老化时长</Label>
         <TextBox Name ="tbCharge"     Grid.Row="1" Grid.Column="4" Margin="3" Padding="2" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Left" Width="100" TextChanged="tbCharge_TextChanged" KeyDown="tbCharge_KeyDown" />
         <Label Name   ="lbDischargeUnit" Grid.Row="1" Grid.Column="5" Margin="3" Padding="2" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Left">h</Label>
 
         <!--补电时长-->
-        <Label Name   ="lbRecharge"     Grid.Row="1" Grid.Column="6" Margin="3" Padding="2" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Left">补电时长</Label>
-        <TextBox Name ="tbRecharge"     Grid.Row="1" Grid.Column="7" Margin="3" Padding="2" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Left" Width="100" KeyDown="tbRecharge_KeyDown" TextChanged="tbRecharge_TextChanged" />
-        <Label Name   ="lbRechargeUnit" Grid.Row="1" Grid.Column="8" Margin="3" Padding="2" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Left">h</Label>
+        <Label Name   ="lbRecharge"  Visibility="Collapsed"   Grid.Row="1" Grid.Column="6" Margin="3" Padding="2" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Left">补电时长</Label>
+        <TextBox Name ="tbRecharge"  Visibility="Collapsed"    Grid.Row="1" Grid.Column="7" Margin="3" Padding="2" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Left" Width="100" KeyDown="tbRecharge_KeyDown" TextChanged="tbRecharge_TextChanged" />
+        <Label Name   ="lbRechargeUnit" Visibility="Collapsed"  Grid.Row="1" Grid.Column="8" Margin="3" Padding="2" FontSize="12" VerticalAlignment="Center" HorizontalAlignment="Left">h</Label>
 
 
         <!--其他货架区-->
